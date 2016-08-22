@@ -1,0 +1,77 @@
+{
+    "name": "autoimport",
+    "displayName": "Auto Import",
+    "description": "automatically finds, parses and provides code actions for all available imports. Only currently works with files in your folder and TypeScript.",
+    "version": "0.8.0",
+    "publisher": "steoates",
+    "engines": {
+        "vscode": "^0.10.10"
+    },
+    "galleryBanner": {
+        "color": "#2d4794",
+        "theme": "dark"
+    },
+    "keywords": [
+        "typescript",
+        "imports",
+        "require",
+        "auto import"
+    ],
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onLanguage:typescript"
+    ],
+    "main": "./out/src/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.scanNodeModules",
+                "title": "Scan node_modules for imports"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Auto Import configuration",
+            "properties": {
+                "autoimport.filesToScan": {
+                    "type": "string",
+                    "default": "**/*.ts",
+                    "description": "Glob for files to watch and scan, e.g ./src/** ./src/app/**/*.ts. Defaults to **/*.ts"
+                },
+                "autoimport.showNotifications": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies wether to show notifications from Auto Import"
+                },
+                "autoimport.doubleQuotes": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Specifies wether to use double quotes"
+                },
+                "autoimport.spaceBetweenBraces": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Specifies wether to use spaces between first and last brace"
+                }
+            }
+        }
+    },
+    "icon": "icon.png",
+    "homepage": "https://github.com/soates/Auto-Import",
+    "scripts": {
+        "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+        "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install"
+    },
+    "devDependencies": {
+        "typescript": "^1.8.5",
+        "vscode": "^0.11.0",
+        "node-json-db": "0.7.2"
+    },
+    "dependencies": {
+        "lodash": "^4.13.1",
+        "node-json-db": "^0.7.2"
+    }
+}
