@@ -95,10 +95,14 @@ export class ImportFixer {
 
         let makeRelativePath = (rp) => {
 
-            let preAppend = /^win/.test(process.platform) ? '.\\' : './';
+            let preAppend = './';
 
             if (!rp.startsWith(preAppend)) {
                 rp = preAppend + rp;
+            }
+
+            if(/^win/.test(process.platform)){
+                rp = rp.replace(/\\/g, '/');
             }
 
             return rp;
