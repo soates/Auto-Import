@@ -1,3 +1,4 @@
+import { PathHelper } from './helpers/path-helper';
 import * as vscode from 'vscode';
 
 import { ImportDb, ImportObject } from './import-db';
@@ -57,9 +58,12 @@ export class ImportAction {
             if ((<any>imp.file).discovered) {
                 return imp.file.fsPath;
             } else {
-                return imp.file.fsPath.match(/([^\/]*)\/*$/)[0];
+                let rp = PathHelper.normalisePath(
+                    PathHelper.getRelativePath(context.document.uri.fsPath, imp.file.fsPath));
+                return rp;
             }
         };
+
         let handlers = [];
         context.imports.forEach(i => {
             handlers.push({

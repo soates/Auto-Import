@@ -2,10 +2,13 @@ import { NodeUpload } from './node-upload';
 import { ImportAction } from './import-action';
 import { ImportFixer } from './import-fixer';
 import { ImportScanner } from './import-scanner';
+import { ImportDb } from './import-db';
 
 import * as vscode from 'vscode';
 
 export class AutoImport {
+
+    public static statusBar;
 
     constructor(private context: vscode.ExtensionContext) { }
 
@@ -44,14 +47,20 @@ export class AutoImport {
             new ImportFixer().fix(d, r, c, t, i);
         });
 
-        this.context.subscriptions.push(importScanner, importFixer, nodeScanner, codeActionFixer);
+        AutoImport.statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
+
+        AutoImport.statusBar.text = 'Importable: Scanning.. ';
+
+        AutoImport.statusBar.show();
+
+        this.context.subscriptions.push(importScanner, importFixer, nodeScanner, codeActionFixer, AutoImport.statusBar);
     }
 
     public attachFileWatcher(): void {
 
         let glob = vscode.workspace.getConfiguration('autoimport').get<string>('filesToScan');
 
-        let watcher = vscode.workspace.createFileSystemWatcher('**/*.ts');
+        let watcher = vscode.workspace.createFileSystemWatcher(glob);
 
         watcher.onDidChange((file: vscode.Uri) => {
             vscode.commands
@@ -65,7 +74,7 @@ export class AutoImport {
 
         watcher.onDidDelete((file: vscode.Uri) => {
             vscode.commands
-                .executeCommand('extension.importScan', { file, edit: true });
+                .executeCommand('extension.importScan', { file, delete: true });
         })
 
     }
@@ -86,5 +95,9 @@ export class AutoImport {
         settings.firstRun = true;
 
         this.context.workspaceState.update('auto-import-settings', settings);
+    }
+
+    public static setStatusBar() {
+        AutoImport.statusBar.text = `Importable: ${new ImportDb().count}`;
     }
 }

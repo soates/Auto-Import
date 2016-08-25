@@ -19,6 +19,12 @@ export class ImportDb {
         return vscode.workspace.rootPath.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
     }
 
+    public  get count() {
+       let imps = this.getDB().getData('/');
+
+       return Object.keys(imps.imports).length + Object.keys(imps.mapping).length
+    }
+
     public getImport(name: string): Array<ImportObject> {
         let db = this.getDB();
 
@@ -27,12 +33,15 @@ export class ImportDb {
 
     public delete(request: any): void {
         let db = this.getDB();
+        try {
+            let map = db.getData(`/mapping/${request.file.fsPath.replace(/\//g, '-')}`)
 
-        let map = db.getData(`/mapping/${request.file.fsPath.replace(/\//g, '-')}`)
+            map.forEach(m => {
+                db.delete(m.location)
+            });
+        } catch (error) {
+        }
 
-        map.forEach(m => {
-            db.delete(m.location)
-        });
     }
 
     public saveImport(name: string, data: any, file: any): void {

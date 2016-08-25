@@ -20,14 +20,20 @@ Automatically finds, parses and provides code actions for all available imports.
 
 ----
 
-## Roadmap
-
-- 0.9 - Automatically install and use npm packages
-- 0.8 - Full node_modules support, merge imports and ability to organize
-
-----
 
 ## Changelog
+
+### 0.9
+ 
+- Added Import status bar, currently show you how many importable objects you have.
+- Correctly uses configured file paths for fileWatcher.
+- Fixed new exports not being immediately discovered.
+- CodeAction import paths are relative to the current file.
+- Typings are now excluded by default (along with node_modules and jspm_packages)
+
+### 0.8.1
+
+- Fixed Windows paths issue
 
 ### 0.8
 

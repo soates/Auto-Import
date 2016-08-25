@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import * as _ from 'lodash';
 
 import { ImportDb } from './import-db';
+import { AutoImport } from './auto-import';
 
 export class ImportScanner {
 
@@ -43,20 +44,24 @@ export class ImportScanner {
 
     public edit(request: any): void {
         this.db.delete(request);
-        this.loadFile(request.file, false);
+        this.loadFile(request.file, true);
         new NodeUpload(vscode.workspace.getConfiguration('autoimport')).scanNodeModules();
     }
 
     public delete(request: any): void {
         this.db.delete(request);
+        AutoImport.setStatusBar();
     }
 
 
     private processWorkspaceFiles(files: vscode.Uri[]): void {
-        files.filter((f) => {
-            return f.fsPath.indexOf('node_modules') === -1 && f.fsPath.indexOf('jspm_packages') === -1;
-        }).forEach((f, i) => {
-            this.loadFile(f, i === (files.length - 1));
+        let pruned = files.filter((f) => {
+            return f.fsPath.indexOf('typings') === -1 &&
+                f.fsPath.indexOf('node_modules') === -1 &&
+                f.fsPath.indexOf('jspm_packages') === -1;
+        });
+        pruned.forEach((f, i) => {
+            this.loadFile(f, i === (pruned.length - 1));
         });
     }
 
@@ -67,6 +72,10 @@ export class ImportScanner {
             }
 
             this.processFile(data, file);
+
+            if (last) {
+                AutoImport.setStatusBar();
+            }
 
             if (last && this.showOutput && this.showNotifications) {
                 this.scanEnded = new Date();
@@ -80,9 +89,10 @@ export class ImportScanner {
     }
 
     private processFile(data: any, file: vscode.Uri): void {
-        var classMatches = data.match(/(export class) ([A-Z])\w+/g),
-            interfaceMatches = data.match(/(export interface) ([A-Z])\w+/g),
-            propertyMatches = data.match(/(export let) ([A-Z])\w+/g)
+        var classMatches = data.match(/(export class) ([a-zA-z])\w+/g),
+            interfaceMatches = data.match(/(export interface) ([a-zA-z])\w+/g),
+            propertyMatches = data.match(/(export let) ([a-zA-z])\w+/g),
+            varMatches = data.match(/(export var) ([a-zA-z])\w+/g)
 
         if (classMatches) {
             classMatches.forEach(m => {
@@ -102,10 +112,10 @@ export class ImportScanner {
             });
         }
 
-        if (propertyMatches) {
-            propertyMatches.forEach(m => {
+        if (propertyMatches || varMatches) {
+            [].concat(propertyMatches, varMatches).filter(m => m).forEach(m => {
                 let workingFile: string =
-                    m.replace('export', '').replace('let', '');
+                    m.replace('export', '').replace('let', '').replace('var', '');
 
                 this.db.saveImport(workingFile, data, file);
             });
