@@ -37,7 +37,7 @@
             "properties": {
                 "autoimport.filesToScan": {
                     "type": "string",
-                    "default": "**/*.ts",
+                    "default": "${workspaceRoot}/**/*.ts",
                     "description": "Glob for files to watch and scan, e.g ./src/** ./src/app/**/*.ts. Defaults to **/*.ts"
                 },
                 "autoimport.showNotifications": {
