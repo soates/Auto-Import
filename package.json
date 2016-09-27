@@ -2,7 +2,7 @@
     "name": "autoimport",
     "displayName": "Auto Import",
     "description": "automatically finds, parses and provides code actions for all available imports. Only currently works with files in your folder and TypeScript.",
-    "version": "0.9.0",
+    "version": "1.0.1",
     "publisher": "steoates",
     "engines": {
         "vscode": "^0.10.10"

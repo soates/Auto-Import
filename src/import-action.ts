@@ -32,8 +32,13 @@ export class ImportAction {
     private canHandleAction(context: Context): boolean {
         let diagnostic: vscode.Diagnostic = context.context.diagnostics[0];
 
-        if (diagnostic && diagnostic.message.startsWith('Cannot find name')) {
-            let imp = diagnostic.message.replace('Cannot find name', '')
+        if (!diagnostic) {
+            return false;
+        }
+
+        if (diagnostic.message.startsWith('Typescript Cannot find name') || diagnostic.message.startsWith('Cannot find name')) {
+            let imp = diagnostic.message.replace('Typescript Cannot find name', '')
+                .replace('Cannot find name', '')
                 .replace(/{|}|from|import|'|"| |\.|;/gi, '')
 
             try {

@@ -23,6 +23,14 @@ Automatically finds, parses and provides code actions for all available imports.
 
 ## Changelog
 
+### 1.0.1
+
+- Fixed breaking bug with vs 1.5.* and < TypeScript 2.0.0
+
+### 1.0
+
+- Few small tweaks and fixed error with vscode 1.5.*
+
 ### 0.9
  
 - Added Import status bar, currently show you how many importable objects you have.
