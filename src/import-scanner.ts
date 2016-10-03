@@ -92,7 +92,8 @@ export class ImportScanner {
         var classMatches = data.match(/(export class) ([a-zA-z])\w+/g),
             interfaceMatches = data.match(/(export interface) ([a-zA-z])\w+/g),
             propertyMatches = data.match(/(export let) ([a-zA-z])\w+/g),
-            varMatches = data.match(/(export var) ([a-zA-z])\w+/g)
+            varMatches = data.match(/(export var) ([a-zA-z])\w+/g),
+            constMatches = data.match(/(export const) ([a-zA-z])\w+/g)
 
         if (classMatches) {
             classMatches.forEach(m => {
@@ -112,10 +113,10 @@ export class ImportScanner {
             });
         }
 
-        if (propertyMatches || varMatches) {
-            [].concat(propertyMatches, varMatches).filter(m => m).forEach(m => {
+        if (propertyMatches || varMatches || constMatches) {
+            [].concat(propertyMatches, varMatches, constMatches).filter(m => m).forEach(m => {
                 let workingFile: string =
-                    m.replace('export', '').replace('let', '').replace('var', '');
+                    m.replace('export', '').replace('let', '').replace('var', '').replace('const', '');
 
                 this.db.saveImport(workingFile, data, file);
             });
