@@ -36,7 +36,12 @@ export class ImportFixer {
     }
 
     private shouldMergeImport(document: vscode.TextDocument, relativePath): boolean {
-        return document.getText().indexOf(relativePath) !== -1;
+        let currentDoc = document.getText();
+        let isCommentLine = (text: string):boolean => {
+            let firstTwoLetters = text.trim().substr(0, 2);
+            return firstTwoLetters === '//' || firstTwoLetters === '/*';
+        }
+        return currentDoc.indexOf(relativePath) !== -1 && !isCommentLine(currentDoc);
     }
 
     private mergeImports(document: vscode.TextDocument, edit: vscode.WorkspaceEdit, name, file, relativePath: string) {
