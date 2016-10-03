@@ -71,17 +71,17 @@ export class ImportFixer {
     }
 
     private createImportStatement(imp: string, path: string, endline: boolean = false): string {
-        let baseString = `import { ${imp} } from '${path}';${endline ? '\r\n' : ''}`;
-
-        if (this.doubleQuotes) {
-            baseString = baseString.replace(/'/gi, "\"");
+        let formattedPath = path.replace(/\"/g, '')
+                                .replace(/\'/g, '');
+        if ((this.doubleQuotes) && (this.spacesBetweenBraces)) {
+            return `import { ${imp} } from "${formattedPath}";${endline? '\r\n' : ''}`;
+        } else if (this.doubleQuotes) {
+            return `import {${imp}} from "${formattedPath}";${endline? '\r\n' : ''}`;
+        } else if (this.spacesBetweenBraces) {
+            return `import { ${imp} } from '${formattedPath}';${endline? '\r\n' : ''}`;
+        } else {
+            return `import {${imp}} from '${formattedPath}';${endline? '\r\n' : ''}`;
         }
-
-        if (!this.spacesBetweenBraces) {
-            baseString = baseString.replace('{ ', '{').replace(' }', '}');
-        }
-
-        return baseString;
     }
 
     private getRelativePath(document, importObj: vscode.Uri | any): string {
