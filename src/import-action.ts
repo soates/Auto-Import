@@ -13,11 +13,6 @@ export interface Context {
 
 export class ImportAction {
 
-    private db: ImportDb;
-
-    constructor() {
-        this.db = new ImportDb();
-    }
 
     public provideCodeActions(document: vscode.TextDocument, range: vscode.Range,
         context: vscode.CodeActionContext, token: vscode.CancellationToken): vscode.Command[] {
@@ -43,7 +38,7 @@ export class ImportAction {
 
             try {
 
-                let found = this.db.getImport(imp);
+                let found = ImportDb.getImport(imp);
 
                 if (found) {
                     context.imports = found;

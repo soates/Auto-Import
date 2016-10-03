@@ -8,8 +8,6 @@ import { AutoImport } from './auto-import';
 
 export class ImportScanner {
 
-    private db: ImportDb;
-
     private scanStarted: Date;
 
     private scanEnded: Date;
@@ -21,7 +19,6 @@ export class ImportScanner {
     private showNotifications: boolean;
 
     constructor(private config: vscode.WorkspaceConfiguration) {
-        this.db = new ImportDb();
         this.filesToScan = this.config.get<string>('filesToScan');
         this.showNotifications = this.config.get<boolean>('showNotifications');
     }
@@ -40,16 +37,18 @@ export class ImportScanner {
 
         vscode.commands
             .executeCommand('extension.scanNodeModules');
+
     }
 
     public edit(request: any): void {
-        this.db.delete(request);
+        ImportDb.delete(request);
         this.loadFile(request.file, true);
         new NodeUpload(vscode.workspace.getConfiguration('autoimport')).scanNodeModules();
+
     }
 
     public delete(request: any): void {
-        this.db.delete(request);
+        ImportDb.delete(request);
         AutoImport.setStatusBar();
     }
 
@@ -60,6 +59,7 @@ export class ImportScanner {
                 f.fsPath.indexOf('node_modules') === -1 &&
                 f.fsPath.indexOf('jspm_packages') === -1;
         });
+
         pruned.forEach((f, i) => {
             this.loadFile(f, i === (pruned.length - 1));
         });
@@ -67,6 +67,7 @@ export class ImportScanner {
 
     private loadFile(file: vscode.Uri, last: boolean): void {
         FS.readFile(file.fsPath, 'utf8', (err, data) => {
+
             if (err) {
                 return console.log(err);
             }
@@ -85,6 +86,7 @@ export class ImportScanner {
                 vscode.window
                     .showInformationMessage(str);
             }
+
         });
     }
 
@@ -99,7 +101,7 @@ export class ImportScanner {
                 let workingFile: string =
                     m.replace('export', '').replace('class', '');
 
-                this.db.saveImport(workingFile, data, file);
+                ImportDb.saveImport(workingFile, data, file);
             });
         }
 
@@ -108,7 +110,7 @@ export class ImportScanner {
                 let workingFile: string =
                     m.replace('export', '').replace('interface', '');
 
-                this.db.saveImport(workingFile, data, file);
+                ImportDb.saveImport(workingFile, data, file);
             });
         }
 
@@ -117,7 +119,7 @@ export class ImportScanner {
                 let workingFile: string =
                     m.replace('export', '').replace('let', '').replace('var', '');
 
-                this.db.saveImport(workingFile, data, file);
+                ImportDb.saveImport(workingFile, data, file);
             });
         }
     }

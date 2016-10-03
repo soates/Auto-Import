@@ -28,7 +28,9 @@ export class AutoImport {
         let codeActionFixer = vscode.languages.registerCodeActionsProvider('typescript', new ImportAction())
 
         let importScanner = vscode.commands.registerCommand('extension.importScan', (request: any) => {
+
             let scanner = new ImportScanner(vscode.workspace.getConfiguration('autoimport'))
+
             if (request.showOutput) {
                 scanner.scan(request);
             } else if (request.edit) {
@@ -49,7 +51,7 @@ export class AutoImport {
 
         AutoImport.statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
 
-        AutoImport.statusBar.text = 'Importable: Scanning.. ';
+        AutoImport.statusBar.text = '{..} : Scanning.. ';
 
         AutoImport.statusBar.show();
 
@@ -98,6 +100,6 @@ export class AutoImport {
     }
 
     public static setStatusBar() {
-        AutoImport.statusBar.text = `Importable: ${new ImportDb().count}`;
+        AutoImport.statusBar.text = `{..} : ${ImportDb.count}`;
     }
 }

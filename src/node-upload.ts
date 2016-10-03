@@ -9,12 +9,10 @@ export class NodeUpload {
 
     private useAutoImportNet: boolean;
 
-    private db: ImportDb;
 
     constructor(private config: vscode.WorkspaceConfiguration) {
         this.filesToScan = this.config.get<string>('filesToScan');
         this.useAutoImportNet = this.config.get<boolean>('useAutoImportNet');
-        this.db = new ImportDb();
     }
 
     public scanNodeModules() {
@@ -23,7 +21,7 @@ export class NodeUpload {
                 let map = mappings[key];
                 if (map) {
                     map.forEach(exp => {
-                        this.db.saveImport(exp, exp, { fsPath: key, discovered: true })
+                        ImportDb.saveImport(exp, exp, { fsPath: key, discovered: true })
                     });
                 }
             }
