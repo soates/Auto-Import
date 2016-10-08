@@ -21,7 +21,8 @@
         "Other"
     ],
     "activationEvents": [
-        "onLanguage:typescript"
+        "onLanguage:typescript",
+        "onLanguage:typescriptreact"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -37,8 +38,8 @@
             "properties": {
                 "autoimport.filesToScan": {
                     "type": "string",
-                    "default": "${workspaceRoot}/**/*.ts",
-                    "description": "Glob for files to watch and scan, e.g ./src/** ./src/app/**/*.ts. Defaults to **/*.ts"
+                    "default": "${workspaceRoot}/**/*.{ts,tsx}",
+                    "description": "Glob for files to watch and scan, e.g ./src/** ./src/app/**/*.ts. Defaults to **/*.{ts,tsx}"
                 },
                 "autoimport.showNotifications": {
                     "type": "boolean",
