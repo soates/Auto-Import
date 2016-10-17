@@ -23,6 +23,11 @@ Automatically finds, parses and provides code actions for all available imports.
 
 ## Changelog
 
+### 1.0.2/1.0.3
+
+- Merged Pull Request from [lukeautry](https://github.com/lukeautry "lukeautry") and [zhaoshengjun](https://github.com/zhaoshengjun "zhaoshengjun") , Big thanks to both.
+
+
 ### 1.0.1
 
 - Fixed breaking bug with vs 1.5.* and < TypeScript 2.0.0
