@@ -17,6 +17,10 @@ export class ImportDb {
         return ImportDb.imports.length;
     }
 
+    public static all(): Array<ImportObject> {
+        return ImportDb.imports;
+    }
+
     public static getImport(name: string): Array<ImportObject> {
         return ImportDb.imports.filter(i => i.name === name);
     }
@@ -51,7 +55,11 @@ export class ImportDb {
             file
         }
 
-        ImportDb.imports.push(obj);
+        let exists = ImportDb.imports.findIndex(m => m.name === obj.name && m.file.fsPath === file.fsPath);
+
+        if (exists === -1) {
+            ImportDb.imports.push(obj);
+        }
 
     }
 }

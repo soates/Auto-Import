@@ -3,6 +3,7 @@ import { ImportAction } from './import-action';
 import { ImportFixer } from './import-fixer';
 import { ImportScanner } from './import-scanner';
 import { ImportDb } from './import-db';
+import { ImportCompletion } from './import-completion';
 
 import * as vscode from 'vscode';
 
@@ -49,13 +50,15 @@ export class AutoImport {
             new ImportFixer().fix(d, r, c, t, i);
         });
 
+        let completetion = vscode.languages.registerCompletionItemProvider('typescript', new ImportCompletion(this.context, vscode.workspace.getConfiguration('autoimport').get<boolean>('autoComplete')), '');
+
         AutoImport.statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
 
         AutoImport.statusBar.text = '{..} : Scanning.. ';
 
         AutoImport.statusBar.show();
 
-        this.context.subscriptions.push(importScanner, importFixer, nodeScanner, codeActionFixer, AutoImport.statusBar);
+        this.context.subscriptions.push(importScanner, importFixer, nodeScanner, codeActionFixer, AutoImport.statusBar, completetion);
     }
 
     public attachFileWatcher(): void {

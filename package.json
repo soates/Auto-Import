@@ -1,8 +1,8 @@
 {
     "name": "autoimport",
     "displayName": "Auto Import",
-    "description": "automatically finds, parses and provides code actions for all available imports. Only currently works with files in your folder and TypeScript.",
-    "version": "1.0.3",
+    "description": "Automatically finds, parses and provides code actions and code completion for all available imports. Works with Typescript and TSX",
+    "version": "1.2.1",
     "publisher": "steoates",
     "engines": {
         "vscode": "^0.10.10"
@@ -15,6 +15,7 @@
         "typescript",
         "imports",
         "require",
+        "TSX",
         "auto import"
     ],
     "categories": [
@@ -54,6 +55,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Specifies wether to use spaces between first and last brace"
+                },
+                "autoimport.autoComplete": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Adds found items to intellisense and automatically imports then"
                 }
             }
         }

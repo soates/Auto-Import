@@ -24,6 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
         extension.attachFileWatcher();
 
         extension.scanIfRequired();
+        
 
     } catch (error) {
         ErrorHelper.handle(error);
