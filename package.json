@@ -22,7 +22,8 @@
         "Other"
     ],
     "activationEvents": [
-        "onLanguage:typescript"
+        "onLanguage:typescript",
+        "onLanguage:typescriptreact"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -38,7 +39,7 @@
             "properties": {
                 "autoimport.filesToScan": {
                     "type": "string",
-                    "default": "**/*.ts",
+                    "default": "**/*.{ts,tsx}",
                     "description": "Glob for files to watch and scan, e.g ./src/** ./src/app/**/*.ts. Defaults to **/*.ts"
                 },
                 "autoimport.showNotifications": {
