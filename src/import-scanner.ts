@@ -95,7 +95,8 @@ export class ImportScanner {
             interfaceMatches = data.match(/(export interface) ([a-zA-z])\w+/g),
             propertyMatches = data.match(/(export let) ([a-zA-z])\w+/g),
             varMatches = data.match(/(export var) ([a-zA-z])\w+/g),
-            constMatches = data.match(/(export const) ([a-zA-z])\w+/g)
+            constMatches = data.match(/(export const) ([a-zA-z])\w+/g),
+            functionMatches = data.match(/(export function) ([a-zA-z])\w+/g)
 
         if (classMatches) {
             classMatches.forEach(m => {
@@ -123,5 +124,15 @@ export class ImportScanner {
                 ImportDb.saveImport(workingFile, data, file);
             });
         }
+
+        if (functionMatches) {
+            functionMatches.forEach(m => {
+                let workingFile: string =
+                    m.replace('export', '').replace('function', '');
+
+                ImportDb.saveImport(workingFile, data, file);
+            });
+        }
+
     }
 }
