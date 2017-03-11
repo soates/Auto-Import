@@ -1,6 +1,6 @@
-### Auto Import
+### VSCode Extension Auto Import
 
-Automatically finds, parses and provides code actions and code completion for all available imports. Works with Typescript and TSX.
+Automatically finds, parses and provides code actions and code completion for all available imports. Works with JavaScript and TypeScript.
 
 ----
 
@@ -10,7 +10,7 @@ Automatically finds, parses and provides code actions and code completion for al
 
 ## Configuration
 
-> filesToScan - Glob for which files in your workspace to scan, defaults to '**/*.{ts, tsx}'
+> filesToScan - Glob for which files in your workspace to scan, defaults to '**/*.{js, jsx, ts, tsx}'
 
 > showNotifications - Controls if the annoying notifications should be shown, defaults to false
 
@@ -24,6 +24,14 @@ Automatically finds, parses and provides code actions and code completion for al
 
 
 ## Changelog
+
+### 1.3.0
+
+- Fork from https://github.com/soates/Auto-Import
+- Upgrade Dependencies
+- Add JavaScript Support
+- Merge Pull-Requests
+- Fix TS Errors
 
 ### 1.2.2
 
@@ -50,7 +58,7 @@ Automatically finds, parses and provides code actions and code completion for al
 - Few small tweaks and fixed error with vscode 1.5.*.
 
 ### 0.9
- 
+
 - Added Import status bar, currently show you how many importable objects you have.
 - Correctly uses configured file paths for fileWatcher.
 - Fixed new exports not being immediately discovered.
