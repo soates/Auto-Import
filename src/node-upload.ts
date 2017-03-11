@@ -45,6 +45,10 @@ export class NodeUpload {
             vscode.workspace.findFiles(this.filesToScan, '**/node_modules/**', 99999).then((files) => {
                 files.forEach((f, i) => {
                     FS.readFile(f.fsPath, 'utf8', (err, data) => {
+                        if (err) {
+                            return console.log(err);
+                        }
+
                         let matches = data.match(/\bimport\s+(?:.+\s+from\s+)?[\'"]([^"\']+)["\']/g);
                         if (matches) {
                             matches.forEach(m => {
