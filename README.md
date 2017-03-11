@@ -1,10 +1,20 @@
-### VSCode Extension - Auto Import - ES6 & TS
+# Auto Import - ES6 & TS (VSCode Extension)
 
-Automatically finds, parses and provides code actions and code completion for all available imports. Works with JavaScript and TypeScript.
+Automatically finds, parses and provides code actions and code completion for all available imports. Works with JavaScript (ES6) and TypeScript (TS).
 
 ----
 
 <img src="http://g.recordit.co/2yRF1XeSbv.gif">
+
+----
+
+## Contributors
+
+* [lukeautry](https://github.com/lukeautry)
+* [martinoppitz](https://github.com/martinoppitz)
+* [zhaoshengjun](https://github.com/zhaoshengjun)
+* [soates](https://github.com/soates)
+* [third774](https://github.com/third774)
 
 ----
 
@@ -22,18 +32,21 @@ Automatically finds, parses and provides code actions and code completion for al
 
 ----
 
-
 ## Changelog
 
-### 1.3.1/1.3.2
+### 1.3.3
+
+- considere flow type annotations
+
+### 1.3.1 / 1.3.2
 
 - Update Metadata
 
 ### 1.3.0
 
 - Fork from https://github.com/soates/Auto-Import
-- Upgrade Dependencies
-- Add JavaScript Support
+- Upgrade Dependencies (e.g. TypeScript >= 2.2.0)
+- Add JavaScript Support (ES6)
 - Merge Pull-Requests
 - Fix TS Errors
 
@@ -48,7 +61,7 @@ Automatically finds, parses and provides code actions and code completion for al
 - TSX Supported added, Thanks to [lukeautry](https://github.com/lukeautry "lukeautry")
 - Minor bug fixes and improvements.
 
-### 1.0.2/1.0.3
+### 1.0.2 / 1.0.3
 
 - Merged Pull Request from [lukeautry](https://github.com/lukeautry "lukeautry") and [zhaoshengjun](https://github.com/zhaoshengjun "zhaoshengjun") , Big thanks to both.
 
@@ -81,7 +94,7 @@ Automatically finds, parses and provides code actions and code completion for al
 - Works on Windows.
 - Now on Github.
 
-### 0.7 / 0.7 / 0.7.2
+### 0.7.0 / 0.7.1 / 0.7.2
 
 - Add configuration to control notifications and files to scan
 - Fixed a few bugs

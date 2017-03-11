@@ -38,6 +38,9 @@ export class ImportFixer {
         if (this.shouldMergeImport(document, relativePath)) {
             edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0),
                 this.mergeImports(document, edit, importName, importObj, relativePath));
+        } else if (/^\/(\/\*) *@flow/.test(document.getText())) {
+            edit.insert(document.uri, new vscode.Position(1, 0),
+                this.createImportStatement(imports[0].name, relativePath, true));
         } else {
             edit.insert(document.uri, new vscode.Position(0, 0),
                 this.createImportStatement(imports[0].name, relativePath, true));
