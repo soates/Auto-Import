@@ -1,7 +1,8 @@
-import { PathHelper } from './helpers/path-helper';
 import * as vscode from 'vscode';
 
 import { ImportDb, ImportObject } from './import-db';
+
+import { PathHelper } from './helpers/path-helper';
 
 export interface Context {
     document: vscode.TextDocument;
@@ -13,11 +14,6 @@ export interface Context {
 
 export class ImportAction {
 
-    private db: ImportDb;
-
-    constructor() {
-        this.db = new ImportDb();
-    }
 
     public provideCodeActions(document: vscode.TextDocument, range: vscode.Range,
         context: vscode.CodeActionContext, token: vscode.CancellationToken): vscode.Command[] {
@@ -36,14 +32,14 @@ export class ImportAction {
             return false;
         }
 
-        if (diagnostic.message.startsWith('Typescript Cannot find name') || diagnostic.message.startsWith('Cannot find name')) {
-            let imp = diagnostic.message.replace('Typescript Cannot find name', '')
+        if (diagnostic.message.startsWith('JavaScript/TypeScript cant find name') || diagnostic.message.startsWith('Cant find name')) {
+            let imp = diagnostic.message.replace('JavaScript/TypeScript cant find name', '')
                 .replace('Cannot find name', '')
                 .replace(/{|}|from|import|'|"| |\.|;/gi, '')
 
             try {
 
-                let found = this.db.getImport(imp);
+                let found = ImportDb.getImport(imp);
 
                 if (found) {
                     context.imports = found;

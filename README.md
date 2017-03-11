@@ -1,6 +1,6 @@
-### AutoImport
+### Auto Import
 
-Automatically finds, parses and provides code actions for all available imports. Only currently works with files in your folder and TypeScript.
+Automatically finds, parses and provides code actions and code completion for all available imports. Works with Typescript and TSX.
 
 ----
 
@@ -18,18 +18,36 @@ Automatically finds, parses and provides code actions for all available imports.
 
 > spaceBetweenBraces - Difference between import {test} and import { test }
 
+> autoComplete - Adds found items to intellisense and automatically imports then
+
 ----
 
 
 ## Changelog
 
+### 1.2.2
+
+- Fix for imports not being merged.
+
+### 1.2.1
+
+- Added optional auto completion for all known imports ( enabled by default ).
+- Improved scanning and seeking speed for large projects.
+- TSX Supported added, Thanks to [lukeautry](https://github.com/lukeautry "lukeautry")
+- Minor bug fixes and improvements.
+
+### 1.0.2/1.0.3
+
+- Merged Pull Request from [lukeautry](https://github.com/lukeautry "lukeautry") and [zhaoshengjun](https://github.com/zhaoshengjun "zhaoshengjun") , Big thanks to both.
+
+
 ### 1.0.1
 
-- Fixed breaking bug with vs 1.5.* and < TypeScript 2.0.0
+- Fixed breaking bug with vs 1.5.* and < TypeScript 2.0.0.
 
 ### 1.0
 
-- Few small tweaks and fixed error with vscode 1.5.*
+- Few small tweaks and fixed error with vscode 1.5.*.
 
 ### 0.9
  

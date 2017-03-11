@@ -18,11 +18,22 @@ export class ImportFixer {
     public fix(document: vscode.TextDocument, range: vscode.Range,
         context: vscode.CodeActionContext, token: vscode.CancellationToken, imports: Array<ImportObject>): void {
 
+        let edit = this.getTextEdit(document, imports);
+
+        vscode.workspace.applyEdit(edit);
+    }
+
+    public getTextEdit(document: vscode.TextDocument, imports: Array<ImportObject>) {
+
         let edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
         let importObj: vscode.Uri | any = imports[0].file;
         let importName: string = imports[0].name;
 
         let relativePath = this.normaliseRelativePath(importObj, this.getRelativePath(document, importObj));
+
+        if (this.alreadyResolved(document, relativePath, importName)) {
+            return edit;
+        }
 
         if (this.shouldMergeImport(document, relativePath)) {
             edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0),
@@ -32,15 +43,32 @@ export class ImportFixer {
                 this.createImportStatement(imports[0].name, relativePath, true));
         }
 
-        vscode.workspace.applyEdit(edit);
+        return edit;
+    }
+
+    private alreadyResolved(document: vscode.TextDocument, relativePath, importName) {
+
+        let exp = new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + relativePath + ')(?:\'\;)')
+
+        let currentDoc = document.getText();
+
+        let foundImport = currentDoc.match(exp)
+
+        if (foundImport && foundImport.length > 0 && foundImport[0].indexOf(importName) > -1) {
+            return true;
+        }
+
+        return false;
     }
 
     private shouldMergeImport(document: vscode.TextDocument, relativePath): boolean {
         let currentDoc = document.getText();
-        let isCommentLine = (text: string):boolean => {
+
+        let isCommentLine = (text: string): boolean => {
             let firstTwoLetters = text.trim().substr(0, 2);
             return firstTwoLetters === '//' || firstTwoLetters === '/*';
         }
+
         return currentDoc.indexOf(relativePath) !== -1 && !isCommentLine(currentDoc);
     }
 
@@ -72,15 +100,15 @@ export class ImportFixer {
 
     private createImportStatement(imp: string, path: string, endline: boolean = false): string {
         let formattedPath = path.replace(/\"/g, '')
-                                .replace(/\'/g, '');
+            .replace(/\'/g, '');
         if ((this.doubleQuotes) && (this.spacesBetweenBraces)) {
-            return `import { ${imp} } from "${formattedPath}";${endline? '\r\n' : ''}`;
+            return `import { ${imp} } from "${formattedPath}";${endline ? '\r\n' : ''}`;
         } else if (this.doubleQuotes) {
-            return `import {${imp}} from "${formattedPath}";${endline? '\r\n' : ''}`;
+            return `import {${imp}} from "${formattedPath}";${endline ? '\r\n' : ''}`;
         } else if (this.spacesBetweenBraces) {
-            return `import { ${imp} } from '${formattedPath}';${endline? '\r\n' : ''}`;
+            return `import { ${imp} } from '${formattedPath}';${endline ? '\r\n' : ''}`;
         } else {
-            return `import {${imp}} from '${formattedPath}';${endline? '\r\n' : ''}`;
+            return `import {${imp}} from '${formattedPath}';${endline ? '\r\n' : ''}`;
         }
     }
 
@@ -106,7 +134,7 @@ export class ImportFixer {
                 rp = preAppend + rp;
             }
 
-            if(/^win/.test(process.platform)){
+            if (/^win/.test(process.platform)) {
                 rp = rp.replace(/\\/g, '/');
             }
 

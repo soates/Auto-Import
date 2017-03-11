@@ -1,10 +1,11 @@
-import { NodeUpload } from './node-upload';
+import * as vscode from 'vscode';
+
 import { ImportAction } from './import-action';
+import { ImportCompletion } from './import-completion';
+import { ImportDb } from './import-db';
 import { ImportFixer } from './import-fixer';
 import { ImportScanner } from './import-scanner';
-import { ImportDb } from './import-db';
-
-import * as vscode from 'vscode';
+import { NodeUpload } from './node-upload';
 
 export class AutoImport {
 
@@ -25,10 +26,12 @@ export class AutoImport {
 
     public attachCommands(): void {
 
-        let codeActionFixer = vscode.languages.registerCodeActionsProvider('typescript', new ImportAction())
+        let codeActionFixer = vscode.languages.registerCodeActionsProvider(['javascript', 'typescript'], new ImportAction())
 
         let importScanner = vscode.commands.registerCommand('extension.importScan', (request: any) => {
+
             let scanner = new ImportScanner(vscode.workspace.getConfiguration('autoimport'))
+
             if (request.showOutput) {
                 scanner.scan(request);
             } else if (request.edit) {
@@ -47,13 +50,15 @@ export class AutoImport {
             new ImportFixer().fix(d, r, c, t, i);
         });
 
+        let completetion = vscode.languages.registerCompletionItemProvider(['javascript', 'typescript'], new ImportCompletion(this.context, vscode.workspace.getConfiguration('autoimport').get<boolean>('autoComplete')), '');
+
         AutoImport.statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
 
-        AutoImport.statusBar.text = 'Importable: Scanning.. ';
+        AutoImport.statusBar.text = '{..} : Scanning.. ';
 
         AutoImport.statusBar.show();
 
-        this.context.subscriptions.push(importScanner, importFixer, nodeScanner, codeActionFixer, AutoImport.statusBar);
+        this.context.subscriptions.push(importScanner, importFixer, nodeScanner, codeActionFixer, AutoImport.statusBar, completetion);
     }
 
     public attachFileWatcher(): void {
@@ -98,6 +103,6 @@ export class AutoImport {
     }
 
     public static setStatusBar() {
-        AutoImport.statusBar.text = `Importable: ${new ImportDb().count}`;
+        AutoImport.statusBar.text = `{..} : ${ImportDb.count}`;
     }
 }

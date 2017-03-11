@@ -1,4 +1,3 @@
-var JsonDB = require('node-json-db');
 
 import * as Path from 'path';
 import * as vscode from 'vscode';
@@ -8,43 +7,41 @@ export interface ImportObject {
     file: vscode.Uri
 }
 
+
 export class ImportDb {
 
+    private static imports: Array<ImportObject> = new Array<ImportObject>();
 
-    public getDB(): any {
-        return new JsonDB(Path.join(__dirname, `import-${this.dbName()}.json`), true, true);
+    public static get count() {
+
+        return ImportDb.imports.length;
     }
 
-    public dbName(): number {
-        return vscode.workspace.rootPath.split("").reduce(function (a, b) { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
+    public static all(): Array<ImportObject> {
+        return ImportDb.imports;
     }
 
-    public  get count() {
-       let imps = this.getDB().getData('/');
-
-       return Object.keys(imps.imports).length + Object.keys(imps.mapping).length
+    public static getImport(name: string): Array<ImportObject> {
+        return ImportDb.imports.filter(i => i.name === name);
     }
 
-    public getImport(name: string): Array<ImportObject> {
-        let db = this.getDB();
+    public static delete(request: any): void {
 
-        return db.getData('/imports/' + name);
-    }
-
-    public delete(request: any): void {
-        let db = this.getDB();
         try {
-            let map = db.getData(`/mapping/${request.file.fsPath.replace(/\//g, '-')}`)
 
-            map.forEach(m => {
-                db.delete(m.location)
-            });
+            let index = ImportDb.imports.findIndex(m => m.file.fsPath === request.file.fsPath);
+
+            if (index !== -1) {
+                ImportDb.imports.splice(index, 1);
+            }
+
         } catch (error) {
+
         }
 
     }
 
-    public saveImport(name: string, data: any, file: any): void {
+    public static saveImport(name: string, data: any, file: any): void {
 
         name = name.trim();
 
@@ -52,13 +49,17 @@ export class ImportDb {
             return;
         }
 
-        let db = this.getDB();
 
         let obj: ImportObject = {
             name,
             file
         }
-        db.push(`/imports/${name}`, [obj], true);
-        db.push(`/mapping/${file.fsPath.replace(/\//g, '-')}`, [{ location: `/imports/${name}` }], true);
+
+        let exists = ImportDb.imports.findIndex(m => m.name === obj.name && m.file.fsPath === file.fsPath);
+
+        if (exists === -1) {
+            ImportDb.imports.push(obj);
+        }
+
     }
 }
