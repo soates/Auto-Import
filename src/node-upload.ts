@@ -1,7 +1,8 @@
-import { ImportDb } from './import-db';
 import * as FS from 'fs';
-import * as vscode from 'vscode';
 import * as _ from 'lodash';
+import * as vscode from 'vscode';
+
+import { ImportDb } from './import-db';
 
 export class NodeUpload {
 
@@ -34,7 +35,7 @@ export class NodeUpload {
 
             let mapArrayToLocation = (exports, location) => {
                 if (mappings[location]) {
-                    mappings[location] = (<[]>mappings[location]).concat(exports);
+                    mappings[location] = (<any>mappings[location]).concat(exports);
                 } else {
                     mappings[location] = exports;
                 }
