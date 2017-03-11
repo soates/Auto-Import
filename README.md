@@ -1,4 +1,4 @@
-### VSCode Extension Auto Import
+### VSCode Extension - Auto Import - ES6 & TS
 
 Automatically finds, parses and provides code actions and code completion for all available imports. Works with JavaScript and TypeScript.
 
@@ -24,6 +24,10 @@ Automatically finds, parses and provides code actions and code completion for al
 
 
 ## Changelog
+
+### 1.3.1/1.3.2
+
+- Update Metadata
 
 ### 1.3.0
 
