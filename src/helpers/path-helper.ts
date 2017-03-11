@@ -12,10 +12,10 @@ export class PathHelper {
 
         let makeRelativePath = (rp) => {
 
-            let preAppend = './';
-
-            if (!rp.startsWith(preAppend)) {
-                rp = preAppend + rp;
+            // https://github.com/soates/Auto-Import/pull/47/commits/fe32277511820d687267bda1674f57625addcea7
+            // if (!rp.startsWith(preAppend)) {
+            if (!rp.startsWith('./') && !rp.startsWith('../')) {
+                rp = './' + rp;
             }
 
             if (/^win/.test(process.platform)) {
