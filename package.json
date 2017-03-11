@@ -2,7 +2,29 @@
     "name": "vscode-extension-auto-import",
     "displayName": "VSCode Extension Auto Import",
     "description": "Automatically finds, parses and provides code actions and code completion for all available imports. Works with JavaScript and TypeScript.",
-    "version": "1.3.0",
+    "version": "1.3.1",
+    "contributors": [
+        {
+            "name": "soates",
+            "url": "https://github.com/soates"
+        },
+        {
+            "name": "lukeautry",
+            "url": "https://github.com/lukeautry"
+        },
+        {
+            "name": "zhaoshengjun",
+            "url": "https://github.com/zhaoshengjun"
+        },
+        {
+            "name": "third774",
+            "url": "https://github.com/third774"
+        },
+        {
+            "name": "martinoppitz",
+            "url": "https://github.com/martinoppitz"
+        }
+    ],
     "publisher": "moppitz",
     "engines": {
         "vscode": "^0.10.10"
@@ -18,7 +40,9 @@
         "require",
         "JSX",
         "TSX",
-        "auto import"
+        "auto import",
+        "module",
+        "import statement"
     ],
     "categories": [
         "Other"
@@ -70,7 +94,7 @@
         }
     },
     "icon": "icon.png",
-    "homepage": "https://github.com/soates/Auto-Import",
+    "homepage": "https://github.com/martinoppitz/vscode-extension-auto-import",
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
         "compile": "tsc -watch -p ./",
