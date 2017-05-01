@@ -61,6 +61,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Adds found items to intellisense and automatically imports then"
+                },
+                "autoimport.trailingSemicolon": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Specifies wether to use trailing semicolon"
                 }
             }
         }
