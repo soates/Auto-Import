@@ -7,12 +7,14 @@ export class ImportFixer {
 
     private spacesBetweenBraces;
     private doubleQuotes;
+    private trailingSemicolon;
 
     constructor() {
         let config = vscode.workspace.getConfiguration('autoimport');
 
         this.spacesBetweenBraces = config.get<boolean>('spaceBetweenBraces');
         this.doubleQuotes = config.get<boolean>('doubleQuotes');
+        this.trailingSemicolon = config.get<boolean>('trailingSemicolon');
     }
 
     public fix(document: vscode.TextDocument, range: vscode.Range,
@@ -48,7 +50,7 @@ export class ImportFixer {
 
     private alreadyResolved(document: vscode.TextDocument, relativePath, importName) {
 
-        let exp = new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + relativePath + ')(?:\'\;)')
+        let exp = new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + relativePath + ')(?:\'\;?)')
 
         let currentDoc = document.getText();
 
@@ -74,7 +76,7 @@ export class ImportFixer {
 
     private mergeImports(document: vscode.TextDocument, edit: vscode.WorkspaceEdit, name, file, relativePath: string) {
 
-        let exp = new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + relativePath + ')(?:\'\;)')
+        let exp = new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + relativePath + ')(?:\'\;?)')
 
         let currentDoc = document.getText();
 
@@ -84,7 +86,7 @@ export class ImportFixer {
             let workingString = foundImport[0];
 
             workingString = workingString
-                .replace(/{|}|from|import|'|"| |;/gi, '').replace(relativePath, '');
+                .replace(/{|}|from|import|'|"| |;?/gi, '').replace(relativePath, '');
 
             let importArray = workingString.split(',');
 
@@ -101,14 +103,15 @@ export class ImportFixer {
     private createImportStatement(imp: string, path: string, endline: boolean = false): string {
         let formattedPath = path.replace(/\"/g, '')
             .replace(/\'/g, '');
+        let semicolon = this.trailingSemicolon ? ';' : ''
         if ((this.doubleQuotes) && (this.spacesBetweenBraces)) {
-            return `import { ${imp} } from "${formattedPath}";${endline ? '\r\n' : ''}`;
+            return `import { ${imp} } from "${formattedPath}"${semicolon}${endline ? '\r\n' : ''}`;
         } else if (this.doubleQuotes) {
-            return `import {${imp}} from "${formattedPath}";${endline ? '\r\n' : ''}`;
+            return `import {${imp}} from "${formattedPath}"${semicolon}${endline ? '\r\n' : ''}`;
         } else if (this.spacesBetweenBraces) {
-            return `import { ${imp} } from '${formattedPath}';${endline ? '\r\n' : ''}`;
+            return `import { ${imp} } from '${formattedPath}'${semicolon}${endline ? '\r\n' : ''}`;
         } else {
-            return `import {${imp}} from '${formattedPath}';${endline ? '\r\n' : ''}`;
+            return `import {${imp}} from '${formattedPath}'${semicolon}${endline ? '\r\n' : ''}`;
         }
     }
 
