@@ -26,7 +26,7 @@ export class AutoImport {
 
     public attachCommands(): void {
 
-        let codeActionFixer = vscode.languages.registerCodeActionsProvider(['javascript', 'typescript'], new ImportAction())
+        let codeActionFixer = vscode.languages.registerCodeActionsProvider(['javascript', 'javascriptreact', 'typescript', 'typescriptreact'], new ImportAction())
 
         let importScanner = vscode.commands.registerCommand('extension.importScan', (request: any) => {
 
@@ -50,7 +50,7 @@ export class AutoImport {
             new ImportFixer().fix(d, r, c, t, i);
         });
 
-        let completetion = vscode.languages.registerCompletionItemProvider(['javascript', 'typescript'], new ImportCompletion(this.context, vscode.workspace.getConfiguration('autoimport').get<boolean>('autoComplete')), '');
+        let completetion = vscode.languages.registerCompletionItemProvider(['javascript', 'javascriptreact', 'typescript', 'typescriptreact'], new ImportCompletion(this.context, vscode.workspace.getConfiguration('autoimport').get<boolean>('autoComplete')), '');
 
         AutoImport.statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
 

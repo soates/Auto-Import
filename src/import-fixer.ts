@@ -40,10 +40,10 @@ export class ImportFixer {
                 this.mergeImports(document, edit, importName, importObj, relativePath));
         } else if (/^\/(\/\*) *@flow/.test(document.getText())) {
             edit.insert(document.uri, new vscode.Position(1, 0),
-                this.createImportStatement(imports[0].name, relativePath, true));
+                this.createImportStatement(imports[0].name, relativePath, true, imports[0].isDefault));
         } else {
             edit.insert(document.uri, new vscode.Position(0, 0),
-                this.createImportStatement(imports[0].name, relativePath, true));
+                this.createImportStatement(imports[0].name, relativePath, true, imports[0].isDefault));
         }
 
         return edit;
@@ -101,18 +101,19 @@ export class ImportFixer {
         return currentDoc;
     }
 
-    private createImportStatement(imp: string, path: string, endline: boolean = false): string {
-        let formattedPath = path.replace(/\"/g, '')
-            .replace(/\'/g, '');
-        if ((this.doubleQuotes) && (this.spacesBetweenBraces)) {
-            return `import { ${imp} } from "${formattedPath}";${endline ? '\r\n' : ''}`;
-        } else if (this.doubleQuotes) {
-            return `import {${imp}} from "${formattedPath}";${endline ? '\r\n' : ''}`;
-        } else if (this.spacesBetweenBraces) {
-            return `import { ${imp} } from '${formattedPath}';${endline ? '\r\n' : ''}`;
-        } else {
-            return `import {${imp}} from '${formattedPath}';${endline ? '\r\n' : ''}`;
-        }
+    private createImportStatement(imp: string, path: string, endline: boolean = false, isDefault: boolean = false): string {
+        let formattedPath = path.replace(/\"/g, '').replace(/\'/g, '');
+        const quoteSymbol = this.doubleQuotes ? `"` : `'`;
+        const importStr = [
+            'import ',
+            isDefault ? '' : this.spacesBetweenBraces ? '{ ' : '{',
+            imp,
+            isDefault ? '' : this.spacesBetweenBraces ? ' }' : '}',
+            ' from ',
+            quoteSymbol + formattedPath + quoteSymbol,
+            endline ? ';\r\n' : ';',
+        ].join('');
+        return importStr;
     }
 
     private getRelativePath(document, importObj: vscode.Uri | any): string {

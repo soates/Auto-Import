@@ -1,8 +1,8 @@
 {
     "name": "vscode-extension-auto-import",
-    "displayName": "Auto Import - ES6 & TS",
+    "displayName": "Auto Import - ES6, TS, JSX, TSX",
     "description": "Automatically finds, parses and provides code actions and code completion for all available imports. Works with JavaScript and TypeScript. [Forked]",
-    "version": "1.3.3",
+    "version": "1.4.0",
     "contributors": [
         {
             "name": "soates",
@@ -25,7 +25,7 @@
             "url": "https://github.com/martinoppitz"
         }
     ],
-    "publisher": "moppitz",
+    "publisher": "NuclleaR",
     "engines": {
         "vscode": "^0.10.10"
     },
@@ -63,7 +63,7 @@
             "properties": {
                 "autoimport.filesToScan": {
                     "type": "string",
-                    "default": "${workspaceRoot}/**/*.{js,jsx,ts,tsx}",
+                    "default": "**/*.{js,jsx,ts,tsx}",
                     "description": "Glob for files to watch and scan, e.g ./src/** ./src/app/**/*.ts. Defaults to **/*.{ts,tsx}"
                 },
                 "autoimport.showNotifications": {
@@ -90,7 +90,7 @@
         }
     },
     "icon": "icon.png",
-    "homepage": "https://github.com/martinoppitz/vscode-extension-auto-import",
+    "homepage": "https://github.com/NuclleaR/vscode-extension-auto-import",
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
         "compile": "tsc -watch -p ./",

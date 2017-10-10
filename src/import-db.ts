@@ -4,7 +4,8 @@ import * as vscode from 'vscode';
 
 export interface ImportObject {
     name: string,
-    file: vscode.Uri
+    file: vscode.Uri,
+    isDefault: boolean,
 }
 
 
@@ -41,7 +42,7 @@ export class ImportDb {
 
     }
 
-    public static saveImport(name: string, data: any, file: any): void {
+    public static saveImport(name: string, data: any, file: any, isDefault: boolean = false): void {
 
         name = name.trim();
 
@@ -49,10 +50,10 @@ export class ImportDb {
             return;
         }
 
-
         let obj: ImportObject = {
             name,
-            file
+            file,
+            isDefault,
         }
 
         let exists = ImportDb.imports.findIndex(m => m.name === obj.name && m.file.fsPath === file.fsPath);

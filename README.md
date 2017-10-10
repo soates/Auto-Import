@@ -1,10 +1,11 @@
-# Auto Import - ES6 & TS (VSCode Extension)
+# Auto Import - ES6, TS, JSX, TSX (VSCode Extension)
 
 Automatically finds, parses and provides code actions and code completion for all available imports. Works with JavaScript (ES6) and TypeScript (TS).
+Forker from old repo [vscode-extension-auto-import](https://github.com/martinoppitz/vscode-extension-auto-import)
 
 ----
 
-<img src="http://g.recordit.co/2yRF1XeSbv.gif">
+<img src="https://media.giphy.com/media/l1J9FmoFwrcqr538Y/giphy.gif">
 
 ----
 
@@ -33,6 +34,12 @@ Automatically finds, parses and provides code actions and code completion for al
 ----
 
 ## Changelog
+
+### 1.4.0
+
+- fix jsx, tsx support
+- fix infinity loop search
+- fix export default keyword
 
 ### 1.3.3
 
@@ -113,4 +120,8 @@ Automatically finds, parses and provides code actions and code completion for al
 
 - Work with node_modules (@angular / underscore for example).
 
+
+----
+
+Feel free to [open an issue](https://github.com/NuclleaR/vscode-extension-auto-import/issues). [Pull requests](https://github.com/NuclleaR/vscode-extension-auto-import/pulls) are also welcome
 

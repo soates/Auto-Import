@@ -32,8 +32,12 @@ export class ImportCompletion implements vscode.CompletionItemProvider {
                 wordToComplete = document.getText(new vscode.Range(range.start, position)).toLowerCase();
             }
 
-            return resolve(ImportDb.all().filter(f => f.name.toLowerCase().indexOf(wordToComplete) > -1)
-                .map(i => this.buildCompletionItem(i, document)));
+            return resolve(ImportDb.all()
+                .filter(f => {
+                    return f.name.toLowerCase().indexOf(wordToComplete) > -1
+                })
+                .map(i => this.buildCompletionItem(i, document))
+            );
         })
     }
 

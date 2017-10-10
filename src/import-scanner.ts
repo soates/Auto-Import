@@ -91,48 +91,16 @@ export class ImportScanner {
     }
 
     private processFile(data: any, file: vscode.Uri): void {
-        var classMatches = data.match(/(export class) ([a-zA-z])\w+/g),
-            interfaceMatches = data.match(/(export interface) ([a-zA-z])\w+/g),
-            propertyMatches = data.match(/(export let) ([a-zA-z])\w+/g),
-            varMatches = data.match(/(export var) ([a-zA-z])\w+/g),
-            constMatches = data.match(/(export const) ([a-zA-z])\w+/g),
-            functionMatches = data.match(/(export function) ([a-zA-z])\w+/g)
+        const regExp = /(export\s?(default)?\s?(class|interface|let|var|const|function)?) ([a-zA-z])\w+/g;
+        var matches = data.match(regExp);
 
-        if (classMatches) {
-            classMatches.forEach(m => {
-                let workingFile: string =
-                    m.replace('export', '').replace('class', '');
-
-                ImportDb.saveImport(workingFile, data, file);
-            });
+        if (matches != null) {
+            matches.forEach(m => {
+                const mArr = m.split(/\s/);
+                const workingFile: string = mArr[mArr.length - 1];
+                const isDefault = m.indexOf('default') !== -1;
+                ImportDb.saveImport(workingFile, data, file, isDefault);
+            })
         }
-
-        if (interfaceMatches) {
-            interfaceMatches.forEach(m => {
-                let workingFile: string =
-                    m.replace('export', '').replace('interface', '');
-
-                ImportDb.saveImport(workingFile, data, file);
-            });
-        }
-
-        if (propertyMatches || varMatches || constMatches) {
-            [].concat(propertyMatches, varMatches, constMatches).filter(m => m).forEach(m => {
-                let workingFile: string =
-                    m.replace('export', '').replace('let', '').replace('var', '').replace('const', '');
-
-                ImportDb.saveImport(workingFile, data, file);
-            });
-        }
-
-        if (functionMatches) {
-            functionMatches.forEach(m => {
-                let workingFile: string =
-                    m.replace('export', '').replace('function', '');
-
-                ImportDb.saveImport(workingFile, data, file);
-            });
-        }
-
     }
 }
