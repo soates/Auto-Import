@@ -12,8 +12,7 @@ export interface Context {
     imports?: Array<ImportObject>
 }
 
-export class ImportAction {
-
+export class ImportAction implements vscode.CodeActionProvider {
 
     public provideCodeActions(document: vscode.TextDocument, range: vscode.Range,
         context: vscode.CodeActionContext, token: vscode.CancellationToken): vscode.Command[] {
@@ -32,7 +31,26 @@ export class ImportAction {
             return false;
         }
 
-        if (diagnostic.message.startsWith('JavaScript/TypeScript cant find name') || diagnostic.message.startsWith('Cant find name')) {
+        if (diagnostic.message.includes('is not defined')) {
+            let imp = diagnostic.message.match(/'(.+)'/g)[0].replace(/'/g, '');
+            try {
+
+                let found = ImportDb.getImport(imp);
+
+                if (found) {
+                    context.imports = found;
+                    return true
+                }
+
+            } catch (exception) {
+                return false;
+            }
+        }
+
+        if (
+            diagnostic.message.startsWith('JavaScript/TypeScript cant find name') ||
+            diagnostic.message.startsWith('Cant find name')
+        ) {
             let imp = diagnostic.message.replace('JavaScript/TypeScript cant find name', '')
                 .replace('Cannot find name', '')
                 .replace(/{|}|from|import|'|"| |\.|;/gi, '')

@@ -57,6 +57,7 @@ export class ImportScanner {
         let pruned = files.filter((f) => {
             return f.fsPath.indexOf('typings') === -1 &&
                 f.fsPath.indexOf('node_modules') === -1 &&
+                f.fsPath.indexOf('.history') === -1 &&
                 f.fsPath.indexOf('jspm_packages') === -1;
         });
 

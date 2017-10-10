@@ -42,7 +42,8 @@ export class ImportFixer {
             edit.insert(document.uri, new vscode.Position(1, 0),
                 this.createImportStatement(imports[0].name, relativePath, true, imports[0].isDefault));
         } else {
-            edit.insert(document.uri, new vscode.Position(0, 0),
+            let insertPosition: vscode.Position = document.positionAt(document.getText().lastIndexOf('import')).translate(1, 0);
+            edit.insert(document.uri, insertPosition,
                 this.createImportStatement(imports[0].name, relativePath, true, imports[0].isDefault));
         }
 
@@ -123,7 +124,7 @@ export class ImportFixer {
 
     private normaliseRelativePath(importObj, relativePath: string): string {
 
-        let removeFileExtenion = (rp) => {
+        let removeFileExtenion = (rp: string) => {
             if (rp) {
                 rp = rp.substring(0, rp.lastIndexOf('.'))
             }
@@ -134,7 +135,7 @@ export class ImportFixer {
 
             let preAppend = './';
 
-            if (!rp.startsWith(preAppend)) {
+            if (!rp.startsWith(preAppend) && !rp.startsWith('../')) {
                 rp = preAppend + rp;
             }
 
