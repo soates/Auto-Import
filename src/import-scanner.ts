@@ -92,12 +92,18 @@ export class ImportScanner {
     }
 
     private processFile(data: any, file: vscode.Uri): void {
-        const regExp = /(export\s?(default)?\s?(class|interface|let|var|const|function)?) ([a-zA-z])\w+/g;
+        //added code to support connect for redux and react router and any other middleware that's nested inside connect or withRouter. 
+        const regExp = /(export\s?(default)?\s?(class|interface|let|var|const|function)?) ((connect|withRouter).+[, (])?(\w+)/g;
         var matches = data.match(regExp);
 
         if (matches != null) {
             matches.forEach(m => {
-                const mArr = m.split(/\s/);
+                //this allows us to reliably gets the last string (not splitting on spaces)
+                const mArr = regExp.exec(m);
+                if(mArr === null){
+                    //this is a weird situation that shouldn't ever happen. but does?
+                    return;
+                }
                 const workingFile: string = mArr[mArr.length - 1];
                 const isDefault = m.indexOf('default') !== -1;
                 ImportDb.saveImport(workingFile, data, file, isDefault);
