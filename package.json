@@ -1,110 +1,109 @@
 {
-    "name": "vscode-extension-auto-import",
-    "displayName": "Auto Import - ES6, TS, JSX, TSX",
-    "description": "Automatically finds, parses and provides code actions and code completion for all available imports. Works with JavaScript and TypeScript. [Forked]",
-    "version": "1.4.0",
-    "contributors": [
-        {
-            "name": "soates",
-            "url": "https://github.com/soates"
-        },
-        {
-            "name": "lukeautry",
-            "url": "https://github.com/lukeautry"
-        },
-        {
-            "name": "zhaoshengjun",
-            "url": "https://github.com/zhaoshengjun"
-        },
-        {
-            "name": "third774",
-            "url": "https://github.com/third774"
-        },
-        {
-            "name": "martinoppitz",
-            "url": "https://github.com/martinoppitz"
-        }
-    ],
-    "publisher": "NuclleaR",
-    "engines": {
-        "vscode": "^0.10.10"
+  "name": "vscode-extension-auto-import",
+  "displayName": "Auto Import - ES6, TS, JSX, TSX",
+  "description":
+    "Automatically finds, parses and provides code actions and code completion for all available imports. Works with JavaScript and TypeScript. [Forked]",
+  "version": "1.4.0",
+  "contributors": [
+    {
+      "name": "soates",
+      "url": "https://github.com/soates"
     },
-    "galleryBanner": {
-        "color": "#2d4794",
-        "theme": "dark"
+    {
+      "name": "lukeautry",
+      "url": "https://github.com/lukeautry"
     },
-    "keywords": [
-        "javascript",
-        "typescript",
-        "imports",
-        "exports",
-        "require"
-    ],
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "onLanguage:javascript",
-        "onLanguage:javascriptreact",
-        "onLanguage:typescript",
-        "onLanguage:typescriptreact"
-    ],
-    "main": "./out/src/extension",
-    "contributes": {
-        "commands": [
-            {
-                "command": "extension.scanNodeModules",
-                "title": "Scan node_modules for imports"
-            }
-        ],
-        "configuration": {
-            "type": "object",
-            "title": "Auto Import configuration",
-            "properties": {
-                "autoimport.filesToScan": {
-                    "type": "string",
-                    "default": "**/*.{js,jsx,ts,tsx}",
-                    "description": "Glob for files to watch and scan, e.g ./src/** ./src/app/**/*.ts. Defaults to **/*.{ts,tsx}"
-                },
-                "autoimport.showNotifications": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Specifies wether to show notifications from Auto Import"
-                },
-                "autoimport.doubleQuotes": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Specifies wether to use double quotes"
-                },
-                "autoimport.spaceBetweenBraces": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Specifies wether to use spaces between first and last brace"
-                },
-                "autoimport.autoComplete": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Adds found items to intellisense and automatically imports then"
-                }
-            }
-        }
+    {
+      "name": "zhaoshengjun",
+      "url": "https://github.com/zhaoshengjun"
     },
-    "icon": "icon.png",
-    "homepage": "https://github.com/NuclleaR/vscode-extension-auto-import",
-    "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install"
+    {
+      "name": "third774",
+      "url": "https://github.com/third774"
     },
-    "devDependencies": {
-        "@types/node": "7.0.8",
-        "@types/mocha": "2.2.40",
-        "mocha": "3.2.0",
-        "typescript": "2.2.1",
-        "vscode": "1.1.0"
-    },
-    "dependencies": {
-        "lodash": "4.17.4",
-        "node-json-db": "0.7.3"
+    {
+      "name": "martinoppitz",
+      "url": "https://github.com/martinoppitz"
     }
+  ],
+  "publisher": "NuclleaR",
+  "engines": {
+    "vscode": "^0.10.10"
+  },
+  "galleryBanner": {
+    "color": "#2d4794",
+    "theme": "dark"
+  },
+  "keywords": ["javascript", "typescript", "imports", "exports", "require"],
+  "categories": ["Other"],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.scanNodeModules",
+        "title": "Scan node_modules for imports"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Auto Import configuration",
+      "properties": {
+        "autoimport.filesToScan": {
+          "type": "string",
+          "default": "**/*.{js,jsx,ts,tsx}",
+          "description": "Glob for files to watch and scan, e.g ./src/** ./src/app/**/*.ts. Defaults to **/*.{ts,tsx}"
+        },
+        "autoimport.showNotifications": {
+          "type": "boolean",
+          "default": false,
+          "description": "Specifies wether to show notifications from Auto Import"
+        },
+        "autoimport.doubleQuotes": {
+          "type": "boolean",
+          "default": false,
+          "description": "Specifies wether to use double quotes"
+        },
+        "autoimport.spaceBetweenBraces": {
+          "type": "boolean",
+          "default": true,
+          "description": "Specifies wether to use spaces between first and last brace"
+        },
+        "autoimport.autoComplete": {
+          "type": "boolean",
+          "default": true,
+          "description": "Adds found items to intellisense and automatically imports then"
+        },
+        "autoimport.higherOrderComponents": {
+          "type": "string",
+          "default": "connect|withRouter",
+          "description":
+            "This allows the importer to find your components name bypass the higher order components that you wrap it in. Each higher order component must be deliminated by pipe |. example: connect|withRouter"
+        }
+      }
+    }
+  },
+  "icon": "icon.png",
+  "homepage": "https://github.com/NuclleaR/vscode-extension-auto-import",
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "@types/node": "7.0.8",
+    "@types/mocha": "2.2.40",
+    "mocha": "3.2.0",
+    "typescript": "2.2.1",
+    "vscode": "1.1.0"
+  },
+  "dependencies": {
+    "lodash": "4.17.4",
+    "node-json-db": "0.7.3"
+  }
 }

@@ -17,10 +17,13 @@ export class ImportScanner {
     private filesToScan: string;
 
     private showNotifications: boolean;
+    
+    private higherOrderComponents: string;
 
     constructor(private config: vscode.WorkspaceConfiguration) {
         this.filesToScan = this.config.get<string>('filesToScan');
         this.showNotifications = this.config.get<boolean>('showNotifications');
+        this.higherOrderComponents = this.config.get<string>('higherOrderComponents');
     }
 
     public scan(request: any): void {
@@ -92,8 +95,9 @@ export class ImportScanner {
     }
 
     private processFile(data: any, file: vscode.Uri): void {
-        //added code to support connect for redux and react router and any other middleware that's nested inside connect or withRouter. 
-        const regExp = /(export\s?(default)?\s?(class|interface|let|var|const|function)?) ((connect|withRouter).+[, (])?(\w+)/g;
+        //added code to support any other middleware that the component can  be nested in. 
+        const regExp = new RegExp(`(export\\s?(default)?\\s?(class|interface|let|var|const|function)?) ((${this.higherOrderComponents}).+[, (])?(\\w+)`, "g");
+
         var matches = data.match(regExp);
 
         if (matches != null) {
