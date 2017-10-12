@@ -17,10 +17,13 @@ export class ImportScanner {
     private filesToScan: string;
 
     private showNotifications: boolean;
+    
+    private higherOrderComponents: string;
 
     constructor(private config: vscode.WorkspaceConfiguration) {
         this.filesToScan = this.config.get<string>('filesToScan');
         this.showNotifications = this.config.get<boolean>('showNotifications');
+        this.higherOrderComponents = this.config.get<string>('higherOrderComponents');
     }
 
     public scan(request: any): void {
@@ -92,12 +95,19 @@ export class ImportScanner {
     }
 
     private processFile(data: any, file: vscode.Uri): void {
-        const regExp = /(export\s?(default)?\s?(class|interface|let|var|const|function)?) ([a-zA-z])\w+/g;
+        //added code to support any other middleware that the component can  be nested in. 
+        const regExp = new RegExp(`(export\\s?(default)?\\s?(class|interface|let|var|const|function)?) ((${this.higherOrderComponents}).+[, (])?(\\w+)`, "g");
+
         var matches = data.match(regExp);
 
         if (matches != null) {
             matches.forEach(m => {
-                const mArr = m.split(/\s/);
+                //this allows us to reliably gets the last string (not splitting on spaces)
+                const mArr = regExp.exec(m);
+                if(mArr === null){
+                    //this is a weird situation that shouldn't ever happen. but does?
+                    return;
+                }
                 const workingFile: string = mArr[mArr.length - 1];
                 const isDefault = m.indexOf('default') !== -1;
                 ImportDb.saveImport(workingFile, data, file, isDefault);

@@ -85,6 +85,11 @@
           "type": "boolean",
           "default": true,
           "description": "Adds found items to intellisense and automatically imports then"
+        },
+        "autoimport.higherOrderComponents": {
+          "type": "string",
+          "default": "connect|withRouter",
+          "description": "This allows the importer to find your components name bypass the higher order components that you wrap it in. Each higher order component must be deliminated by pipe |. example: connect|withRouter"
         }
       }
     }
