@@ -35,6 +35,11 @@ Forker from old repo [vscode-extension-auto-import](https://github.com/martinopp
 
 ## Changelog
 
+### 1.4.1
+
+- Add import action to quick fix menu
+- Added higher order component as a configuration option
+
 ### 1.4.0
 
 - fix jsx, tsx support
