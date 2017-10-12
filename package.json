@@ -1,8 +1,7 @@
 {
   "name": "vscode-extension-auto-import",
   "displayName": "Auto Import - ES6, TS, JSX, TSX",
-  "description":
-    "Automatically finds, parses and provides code actions and code completion for all available imports. Works with JavaScript and TypeScript. [Forked]",
+  "description": "Automatically finds, parses and provides code actions and code completion for all available imports. Works with JavaScript and TypeScript. [Forked]",
   "version": "1.4.0",
   "contributors": [
     {
@@ -34,8 +33,16 @@
     "color": "#2d4794",
     "theme": "dark"
   },
-  "keywords": ["javascript", "typescript", "imports", "exports", "require"],
-  "categories": ["Other"],
+  "keywords": [
+    "javascript",
+    "typescript",
+    "imports",
+    "exports",
+    "require"
+  ],
+  "categories": [
+    "Other"
+  ],
   "activationEvents": [
     "onLanguage:javascript",
     "onLanguage:javascriptreact",
@@ -82,8 +89,7 @@
         "autoimport.higherOrderComponents": {
           "type": "string",
           "default": "connect|withRouter",
-          "description":
-            "This allows the importer to find your components name bypass the higher order components that you wrap it in. Each higher order component must be deliminated by pipe |. example: connect|withRouter"
+          "description": "This allows the importer to find your components name bypass the higher order components that you wrap it in. Each higher order component must be deliminated by pipe |. example: connect|withRouter"
         }
       }
     }
