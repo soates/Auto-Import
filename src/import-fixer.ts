@@ -7,10 +7,12 @@ export class ImportFixer {
 
     private spacesBetweenBraces;
     private doubleQuotes;
+    private useSemiColon;
 
     constructor() {
         let config = vscode.workspace.getConfiguration('autoimport');
 
+        this.useSemiColon = config.get<boolean>('useSemiColon');
         this.spacesBetweenBraces = config.get<boolean>('spaceBetweenBraces');
         this.doubleQuotes = config.get<boolean>('doubleQuotes');
     }
@@ -74,7 +76,9 @@ export class ImportFixer {
 
     private mergeImports(document: vscode.TextDocument, edit: vscode.WorkspaceEdit, name, file, relativePath: string) {
 
-        let exp = new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + relativePath + ')(?:\'\;)')
+        let exp = this.useSemiColon === true ?
+            new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + relativePath + ')(?:\'\;)') :
+            new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + relativePath + ')(?:\'\)')
 
         let currentDoc = document.getText();
 
@@ -83,8 +87,12 @@ export class ImportFixer {
         if (foundImport) {
             let workingString = foundImport[0];
 
+            let replaceTarget = this.useSemiColon === true ?
+                /{|}|from|import|'|"| |;/gi :
+                /{|}|from|import|'|"| |/gi;
+
             workingString = workingString
-                .replace(/{|}|from|import|'|"| |;/gi, '').replace(relativePath, '');
+                .replace(replaceTarget, '').replace(relativePath, '');
 
             let importArray = workingString.split(',');
 
@@ -99,17 +107,28 @@ export class ImportFixer {
     }
 
     private createImportStatement(imp: string, path: string, endline: boolean = false): string {
+
         let formattedPath = path.replace(/\"/g, '')
             .replace(/\'/g, '');
+
+        let returnStr = '';
+
         if ((this.doubleQuotes) && (this.spacesBetweenBraces)) {
-            return `import { ${imp} } from "${formattedPath}";${endline ? '\r\n' : ''}`;
+            returnStr = `import { ${imp} } from "${formattedPath}";${endline ? '\r\n' : ''}`;
         } else if (this.doubleQuotes) {
-            return `import {${imp}} from "${formattedPath}";${endline ? '\r\n' : ''}`;
+            returnStr = `import {${imp}} from "${formattedPath}";${endline ? '\r\n' : ''}`;
         } else if (this.spacesBetweenBraces) {
-            return `import { ${imp} } from '${formattedPath}';${endline ? '\r\n' : ''}`;
+            returnStr = `import { ${imp} } from '${formattedPath}';${endline ? '\r\n' : ''}`;
         } else {
-            return `import {${imp}} from '${formattedPath}';${endline ? '\r\n' : ''}`;
+            returnStr = `import {${imp}} from '${formattedPath}';${endline ? '\r\n' : ''}`;
         }
+
+
+        if (this.useSemiColon === false) {
+            returnStr = returnStr.replace(';', '');
+        }
+
+        return returnStr;
     }
 
     private getRelativePath(document, importObj: vscode.Uri | any): string {

@@ -67,7 +67,7 @@ export class ImportAction {
         let handlers = [];
         context.imports.forEach(i => {
             handlers.push({
-                title: `Import ${i.name} from ${path(i)}`,
+                title: `[AI] Import ${i.name} from ${path(i)}`,
                 command: 'extension.fixImport',
                 arguments: [context.document, context.range, context.context, context.token, context.imports]
             });

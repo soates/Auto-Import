@@ -4,7 +4,7 @@ Automatically finds, parses and provides code actions and code completion for al
 
 ----
 
-<img src="http://g.recordit.co/2yRF1XeSbv.gif">
+<img src="https://gifyu.com/images/autoimport.gif">
 
 ----
 
@@ -20,10 +20,18 @@ Automatically finds, parses and provides code actions and code completion for al
 
 > autoComplete - Adds found items to intellisense and automatically imports then
 
+> useSemiColon - Use ; at the end of a line e.g Import * from ./app or Import * from ./app; - Default True
+
 ----
 
 
 ## Changelog
+
+### 1.5.2
+
+- Added support for Enum & Type imports.
+- Added ability to toggle semi colons - see setting useSemiColon.
+- Added [AI] before import statements - so you know if its come from Auto Import or Typescript.
 
 ### 1.2.2
 
@@ -42,7 +50,7 @@ Automatically finds, parses and provides code actions and code completion for al
 
 
 ### 1.0.1
-
+32swinnqchdncsrvqcnb4wzr2t3e5nopblvhsbhkky4sj2dhyp7a
 - Fixed breaking bug with vs 1.5.* and < TypeScript 2.0.0.
 
 ### 1.0

@@ -2,7 +2,7 @@
     "name": "autoimport",
     "displayName": "Auto Import",
     "description": "Automatically finds, parses and provides code actions and code completion for all available imports. Works with Typescript and TSX",
-    "version": "1.2.1",
+    "version": "1.5.2",
     "publisher": "steoates",
     "engines": {
         "vscode": "^0.10.10"
@@ -61,6 +61,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Adds found items to intellisense and automatically imports then"
+                },
+                "autoimport.useSemiColon": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Use ; at the end of a line e.g Import * from ./app or Import * from ./app; - Default True"
                 }
             }
         }
