@@ -1,8 +1,13 @@
 {
     "name": "autoimport",
     "displayName": "Auto Import",
+<<<<<<< HEAD
     "description": "Automatically finds, parses and provides code actions and code completion for all available imports. Works with Typescript and TSX",
     "version": "1.5.2",
+=======
+    "description": "automatically finds, parses and provides code actions for all available imports. Only currently works with files in your folder and TypeScript.",
+    "version": "1.0.1",
+>>>>>>> 0d85ab66ba6a0b7838d1d3d0c7c3f995eb7b5f8a
     "publisher": "steoates",
     "engines": {
         "vscode": "^0.10.10"
@@ -15,7 +20,6 @@
         "typescript",
         "imports",
         "require",
-        "TSX",
         "auto import"
     ],
     "categories": [
@@ -39,8 +43,8 @@
             "properties": {
                 "autoimport.filesToScan": {
                     "type": "string",
-                    "default": "**/*.{ts,tsx}",
-                    "description": "Glob for files to watch and scan, e.g ./src/** ./src/app/**/*.ts. Defaults to **/*.ts"
+                    "default": "${workspaceRoot}/**/*.{ts,tsx}",
+                    "description": "Glob for files to watch and scan, e.g ./src/** ./src/app/**/*.ts. Defaults to **/*.{ts,tsx}"
                 },
                 "autoimport.showNotifications": {
                     "type": "boolean",
@@ -56,6 +60,7 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Specifies wether to use spaces between first and last brace"
+<<<<<<< HEAD
                 },
                 "autoimport.autoComplete": {
                     "type": "boolean",
@@ -66,6 +71,8 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Use ; at the end of a line e.g Import * from ./app or Import * from ./app; - Default True"
+=======
+>>>>>>> 0d85ab66ba6a0b7838d1d3d0c7c3f995eb7b5f8a
                 }
             }
         }
