@@ -2,7 +2,7 @@
     "name": "autoimport",
     "displayName": "Auto Import",
     "description": "automatically finds, parses and provides code actions for all available imports. Only currently works with files in your folder and TypeScript.",
-    "version": "1.0.3",
+    "version": "1.0.1",
     "publisher": "steoates",
     "engines": {
         "vscode": "^0.10.10"
@@ -21,7 +21,8 @@
         "Other"
     ],
     "activationEvents": [
-        "onLanguage:typescript"
+        "onLanguage:typescript",
+        "onLanguage:typescriptreact"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -37,8 +38,8 @@
             "properties": {
                 "autoimport.filesToScan": {
                     "type": "string",
-                    "default": "**/*.ts",
-                    "description": "Glob for files to watch and scan, e.g ./src/** ./src/app/**/*.ts. Defaults to **/*.ts"
+                    "default": "${workspaceRoot}/**/*.{ts,tsx}",
+                    "description": "Glob for files to watch and scan, e.g ./src/** ./src/app/**/*.ts. Defaults to **/*.{ts,tsx}"
                 },
                 "autoimport.showNotifications": {
                     "type": "boolean",

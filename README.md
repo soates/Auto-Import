@@ -10,7 +10,7 @@ Automatically finds, parses and provides code actions for all available imports.
 
 ## Configuration
 
-> filesToScan - Glob for which files in your workspace to scan, defaults to '**/*.ts'
+> filesToScan - Glob for which files in your workspace to scan, defaults to '**/*.{ts, tsx}'
 
 > showNotifications - Controls if the annoying notifications should be shown, defaults to false
 
