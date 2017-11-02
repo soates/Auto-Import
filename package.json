@@ -2,7 +2,7 @@
     "name": "autoimport",
     "displayName": "Auto Import",
     "description": "Automatically finds, parses and provides code actions and code completion for all available imports. Works with Typescript and TSX",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "publisher": "steoates",
     "engines": {
         "vscode": "^0.10.10"
