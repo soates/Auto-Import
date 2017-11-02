@@ -95,7 +95,9 @@ export class ImportScanner {
             interfaceMatches = data.match(/(export interface) ([a-zA-z])\w+/g),
             propertyMatches = data.match(/(export let) ([a-zA-z])\w+/g),
             varMatches = data.match(/(export var) ([a-zA-z])\w+/g),
-            constMatches = data.match(/(export const) ([a-zA-z])\w+/g)
+            constMatches = data.match(/(export const) ([a-zA-z])\w+/g),
+            enumMatches = data.match(/(export enum) ([a-zA-z])\w+/g),
+            typeMatches = data.match(/(export type) ([a-zA-z])\w+/g)
 
         if (classMatches) {
             classMatches.forEach(m => {
@@ -115,10 +117,11 @@ export class ImportScanner {
             });
         }
 
-        if (propertyMatches || varMatches || constMatches) {
-            [].concat(propertyMatches, varMatches, constMatches).filter(m => m).forEach(m => {
+        if (propertyMatches || varMatches || constMatches || enumMatches || typeMatches) {
+
+            [].concat(propertyMatches, varMatches, constMatches, enumMatches, typeMatches).filter(m => m).forEach(m => {
                 let workingFile: string =
-                    m.replace('export', '').replace('let', '').replace('var', '').replace('const', '');
+                    m.replace('export', '').replace('let', '').replace('var', '').replace('const', '').replace('enum', '').replace('type', '');
 
                 ImportDb.saveImport(workingFile, data, file);
             });
