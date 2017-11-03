@@ -14,7 +14,7 @@ export class PathHelper {
 
             let preAppend = './';
 
-            if (!rp.startsWith(preAppend)) {
+            if (!rp.startsWith(preAppend) && !rp.startsWith('../')) {
                 rp = preAppend + rp;
             }
 
