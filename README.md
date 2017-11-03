@@ -2,6 +2,8 @@
 
 Automatically finds, parses and provides code actions and code completion for all available imports. Works with Typescript and TSX.
 
+#### Multi-root workspace Ready!
+
 ----
 
 <img src="https://gifyu.com/images/autoimport.gif">
@@ -26,6 +28,11 @@ Automatically finds, parses and provides code actions and code completion for al
 
 
 ## Changelog
+
+### 1.5.3
+
+- Finally merged long awaited pull requsts :)
+- Multi-root workspace ready!
 
 ### 1.5.2
 

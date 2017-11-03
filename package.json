@@ -2,7 +2,7 @@
     "name": "autoimport",
     "displayName": "Auto Import",
     "description": "Automatically finds, parses and provides code actions and code completion for all available imports. Works with Typescript and TSX",
-    "version": "1.5.2",
+    "version": "1.5.3",
     "publisher": "steoates",
     "engines": {
         "vscode": "^1.17.0"
@@ -81,11 +81,9 @@
     "devDependencies": {
         "typescript": "^2.0.3",
         "vscode": "^1.0.0",
-        "@types/node": "^6.0.40",
-        "node-json-db": "0.7.2"
+        "@types/node": "^6.0.40"
     },
     "dependencies": {
-        "lodash": "^4.13.1",
-        "node-json-db": "^0.7.2"
+        "lodash": "^4.13.1"
     }
 }
