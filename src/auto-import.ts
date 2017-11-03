@@ -63,28 +63,65 @@ export class AutoImport {
 
     public attachFileWatcher(): void {
 
-        let glob = vscode.workspace.getConfiguration('autoimport').get<string>('filesToScan');
+        var multiWorkspace = vscode.workspace.workspaceFolders.length > 0;
 
-        let watcher = vscode.workspace.createFileSystemWatcher(glob);
+        if (multiWorkspace === true) {
+            
+            vscode.workspace.workspaceFolders.forEach(workspace => {
 
-        watcher.onDidChange((file: vscode.Uri) => {
-            vscode.commands
-                .executeCommand('extension.importScan', { file, edit: true });
-        })
+                let glob = vscode.workspace.getConfiguration('autoimport').get<string>('filesToScan');
 
-        watcher.onDidCreate((file: vscode.Uri) => {
-            vscode.commands
-                .executeCommand('extension.importScan', { file, edit: true });
-        })
+                const relativePattern = new vscode.RelativePattern(workspace, glob);
 
-        watcher.onDidDelete((file: vscode.Uri) => {
-            vscode.commands
-                .executeCommand('extension.importScan', { file, delete: true });
-        })
+                let watcher = vscode.workspace.createFileSystemWatcher(relativePattern);
+
+                watcher.onDidChange((file: vscode.Uri) => {
+                    vscode.commands
+                        .executeCommand('extension.importScan', { workspace, file, edit: true });
+                })
+
+                watcher.onDidCreate((file: vscode.Uri) => {
+                    vscode.commands
+                        .executeCommand('extension.importScan', { workspace, file, edit: true });
+                })
+
+                watcher.onDidDelete((file: vscode.Uri) => {
+                    vscode.commands
+                        .executeCommand('extension.importScan', { workspace, file, delete: true });
+                })
+
+
+            });
+
+        } else {
+
+            let glob = vscode.workspace.getConfiguration('autoimport').get<string>('filesToScan');
+
+            let watcher = vscode.workspace.createFileSystemWatcher(glob);
+
+            let workspace = undefined;
+
+            watcher.onDidChange((file: vscode.Uri) => {
+                vscode.commands
+                    .executeCommand('extension.importScan', { workspace, file, edit: true });
+            })
+
+            watcher.onDidCreate((file: vscode.Uri) => {
+                vscode.commands
+                    .executeCommand('extension.importScan', { workspace, file, edit: true });
+            })
+
+            watcher.onDidDelete((file: vscode.Uri) => {
+                vscode.commands
+                    .executeCommand('extension.importScan', { workspace, file, delete: true });
+            })
+        }
+
 
     }
 
     public scanIfRequired(): void {
+
         let settings = this.context.workspaceState.get<any>('auto-import-settings')
 
         let firstRun = (settings === undefined || settings.firstRun);
@@ -94,8 +131,22 @@ export class AutoImport {
                 .showInformationMessage('[AutoImport] Building cache');
         }
 
-        vscode.commands
-            .executeCommand('extension.importScan', { showOutput: true });
+        var multiWorkspace = vscode.workspace.workspaceFolders.length > 0;
+
+        if (multiWorkspace === true) {
+
+            vscode.workspace.workspaceFolders.forEach(workspace => {
+
+                vscode.commands
+                    .executeCommand('extension.importScan', { workspace, showOutput: true });
+
+            });
+        } else {
+
+            vscode.commands
+                .executeCommand('extension.importScan', { showOutput: true });
+        }
+
 
         settings.firstRun = true;
 

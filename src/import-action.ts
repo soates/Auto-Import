@@ -25,6 +25,7 @@ export class ImportAction {
     }
 
     private canHandleAction(context: Context): boolean {
+
         let diagnostic: vscode.Diagnostic = context.context.diagnostics[0];
 
         if (!diagnostic) {
@@ -38,7 +39,7 @@ export class ImportAction {
 
             try {
 
-                let found = ImportDb.getImport(imp);
+                let found = ImportDb.getImport(imp, context.document.uri);
 
                 if (found) {
                     context.imports = found;

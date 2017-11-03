@@ -3,6 +3,7 @@ import { ImportDb, ImportObject } from './import-db';
 import { ImportFixer } from './import-fixer';
 
 import * as vscode from 'vscode';
+import { workspace } from 'vscode';
 
 
 export class ImportCompletion implements vscode.CompletionItemProvider {
@@ -32,8 +33,18 @@ export class ImportCompletion implements vscode.CompletionItemProvider {
                 wordToComplete = document.getText(new vscode.Range(range.start, position)).toLowerCase();
             }
 
-            return resolve(ImportDb.all().filter(f => f.name.toLowerCase().indexOf(wordToComplete) > -1)
-                .map(i => this.buildCompletionItem(i, document)));
+            let workspace = vscode.workspace.getWorkspaceFolder(document.uri);
+
+            let matcher = f => f.name.toLowerCase().indexOf(wordToComplete) > -1;
+
+            if (workspace !== undefined) {
+                matcher = f => f.name.toLowerCase().indexOf(wordToComplete) > -1 && f.workspace.name == workspace.name;
+            }
+
+            let found = ImportDb.all()
+                .filter(matcher);
+
+            return resolve(found.map(i => this.buildCompletionItem(i, document)));
         })
     }
 

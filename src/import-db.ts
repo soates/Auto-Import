@@ -4,7 +4,8 @@ import * as vscode from 'vscode';
 
 export interface ImportObject {
     name: string,
-    file: vscode.Uri
+    file: vscode.Uri,
+    workspace: vscode.WorkspaceFolder
 }
 
 
@@ -21,8 +22,17 @@ export class ImportDb {
         return ImportDb.imports;
     }
 
-    public static getImport(name: string): Array<ImportObject> {
-        return ImportDb.imports.filter(i => i.name === name);
+    public static getImport(name: string, doc: vscode.Uri): Array<ImportObject> {
+
+        let workspace = vscode.workspace.getWorkspaceFolder(doc);
+
+        let matcher = (i: ImportObject) => i.name === name;
+
+        if (workspace !== undefined) {
+            matcher = (i: ImportObject) => i.name === name && i.workspace.name === workspace.name;
+        }
+
+        return ImportDb.imports.filter(matcher);
     }
 
     public static delete(request: any): void {
@@ -41,7 +51,7 @@ export class ImportDb {
 
     }
 
-    public static saveImport(name: string, data: any, file: any): void {
+    public static saveImport(name: string, data: any, file: any, workspace: vscode.WorkspaceFolder): void {
 
         name = name.trim();
 
@@ -52,7 +62,8 @@ export class ImportDb {
 
         let obj: ImportObject = {
             name,
-            file
+            file,
+            workspace
         }
 
         let exists = ImportDb.imports.findIndex(m => m.name === obj.name && m.file.fsPath === file.fsPath);

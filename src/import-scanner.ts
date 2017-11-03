@@ -31,8 +31,14 @@ export class ImportScanner {
             this.scanStarted = new Date();
         }
 
+        let scanLocation: any = this.filesToScan;
+
+        if (request.workspace !== undefined) {
+            scanLocation = new vscode.RelativePattern(request.workspace, scanLocation);
+        }
+
         vscode.workspace
-            .findFiles(this.filesToScan, '**/node_modules/**', 99999)
+            .findFiles(scanLocation, '**/node_modules/**', 99999)
             .then((files) => this.processWorkspaceFiles(files));
 
         vscode.commands
@@ -42,7 +48,7 @@ export class ImportScanner {
 
     public edit(request: any): void {
         ImportDb.delete(request);
-        this.loadFile(request.file, true);
+        this.loadFile(request.file, request.workspace, true);
         new NodeUpload(vscode.workspace.getConfiguration('autoimport')).scanNodeModules();
 
     }
@@ -54,6 +60,7 @@ export class ImportScanner {
 
 
     private processWorkspaceFiles(files: vscode.Uri[]): void {
+
         let pruned = files.filter((f) => {
             return f.fsPath.indexOf('typings') === -1 &&
                 f.fsPath.indexOf('node_modules') === -1 &&
@@ -61,18 +68,25 @@ export class ImportScanner {
         });
 
         pruned.forEach((f, i) => {
-            this.loadFile(f, i === (pruned.length - 1));
+
+            let workspace: vscode.WorkspaceFolder
+                = vscode.workspace.getWorkspaceFolder(f)
+
+            this.loadFile(f, workspace, i === (pruned.length - 1));
+
+
         });
     }
 
-    private loadFile(file: vscode.Uri, last: boolean): void {
+    private loadFile(file: vscode.Uri, workspace: vscode.WorkspaceFolder, last: boolean): void {
+
         FS.readFile(file.fsPath, 'utf8', (err, data) => {
 
             if (err) {
                 return console.log(err);
             }
 
-            this.processFile(data, file);
+            this.processFile(data, file, workspace);
 
             if (last) {
                 AutoImport.setStatusBar();
@@ -90,7 +104,8 @@ export class ImportScanner {
         });
     }
 
-    private processFile(data: any, file: vscode.Uri): void {
+    private processFile(data: any, file: vscode.Uri, workspace: vscode.WorkspaceFolder): void {
+
         var classMatches = data.match(/(export class) ([a-zA-z])\w+/g),
             interfaceMatches = data.match(/(export interface) ([a-zA-z])\w+/g),
             propertyMatches = data.match(/(export let) ([a-zA-z])\w+/g),
@@ -104,7 +119,7 @@ export class ImportScanner {
                 let workingFile: string =
                     m.replace('export', '').replace('class', '');
 
-                ImportDb.saveImport(workingFile, data, file);
+                ImportDb.saveImport(workingFile, data, file, workspace);
             });
         }
 
@@ -113,7 +128,7 @@ export class ImportScanner {
                 let workingFile: string =
                     m.replace('export', '').replace('interface', '');
 
-                ImportDb.saveImport(workingFile, data, file);
+                ImportDb.saveImport(workingFile, data, file, workspace);
             });
         }
 
@@ -123,7 +138,7 @@ export class ImportScanner {
                 let workingFile: string =
                     m.replace('export', '').replace('let', '').replace('var', '').replace('const', '').replace('enum', '').replace('type', '');
 
-                ImportDb.saveImport(workingFile, data, file);
+                ImportDb.saveImport(workingFile, data, file, workspace);
             });
         }
     }
