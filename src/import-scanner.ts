@@ -16,10 +16,13 @@ export class ImportScanner {
 
     private filesToScan: string;
 
+    private filesToExclude: string;
+
     private showNotifications: boolean;
 
     constructor(private config: vscode.WorkspaceConfiguration) {
         this.filesToScan = this.config.get<string>('filesToScan');
+        this.filesToExclude = this.config.get<string>('filesToExclude');
         this.showNotifications = this.config.get<boolean>('showNotifications');
     }
 
@@ -38,7 +41,7 @@ export class ImportScanner {
         }
 
         vscode.workspace
-            .findFiles(scanLocation, '**/node_modules/**', 99999)
+            .findFiles(scanLocation, this.filesToExclude, 99999)
             .then((files) => this.processWorkspaceFiles(files));
 
         vscode.commands

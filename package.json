@@ -42,6 +42,11 @@
                     "default": "**/*.{ts,tsx}",
                     "description": "Glob for files to watch and scan, e.g ./src/** ./src/app/**/*.ts. Defaults to **/*.{ts,tsx}"
                 },
+                "autoimport.filesToExclude": {
+                    "type": "string",
+                    "default": "**/node_modules/**",
+                    "description": "Glob for files to exclude, e.g **/build/**, {**/node_modules/**,**/out/**}. Defaults to **/node_modules/**"
+                },
                 "autoimport.showNotifications": {
                     "type": "boolean",
                     "default": false,
