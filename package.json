@@ -66,6 +66,16 @@
           "default": "**/*.{js,jsx,ts,tsx}",
           "description": "Glob for files to watch and scan, e.g ./src/** ./src/app/**/*.ts. Defaults to **/*.{ts,tsx}"
         },
+        "autoimport.absolute": {
+          "type": "boolean",
+          "default": false,
+          "description": "True if the imports should be absolute to the workspace root"
+        },
+        "autoimport.sourceRoot": {
+          "type": "string",
+          "default": "./",
+          "description": "Change this if your absolute urls are not absolute from workspace root e.g ./src"
+        },
         "autoimport.showNotifications": {
           "type": "boolean",
           "default": false,

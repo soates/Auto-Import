@@ -1,11 +1,36 @@
 
 import * as Path from 'path';
 import * as vscode from 'vscode';
+import { PathHelper } from './helpers/path-helper';
 
-export interface ImportObject {
-    name: string,
-    file: vscode.Uri,
-    isDefault: boolean,
+
+export class ImportObject {
+
+    name: string;
+    file: vscode.Uri;
+    isDefault: boolean;
+    discovered: boolean;
+
+    constructor(name: string, file: vscode.Uri, isDefault: boolean, discovered: boolean = false) {
+        this.name = name;
+        this.file = file;
+        this.isDefault = isDefault;
+        this.discovered = discovered;
+    }
+
+    getPath(document: vscode.TextDocument): string {
+        if (this.discovered) {
+            return this.file.fsPath;
+        }
+        const absolute = vscode.workspace.getConfiguration('autoimport').get<boolean>('absolute');
+        let basePath = document.uri.fsPath;
+
+        if (absolute) {
+            const sourceRoot = vscode.workspace.getConfiguration('autoimport').get<string>('sourceRoot');
+            basePath = PathHelper.joinPaths(vscode.workspace.rootPath, sourceRoot);
+        }
+        return PathHelper.normalisePath(PathHelper.getRelativePath(basePath, this.file.fsPath), absolute);
+    }
 }
 
 
@@ -42,7 +67,7 @@ export class ImportDb {
 
     }
 
-    public static saveImport(name: string, data: any, file: any, isDefault: boolean = false): void {
+    public static saveImport(name: string, data: any, file: any, isDefault: boolean = false, discovered: boolean): void {
 
         name = name.trim();
 
@@ -50,11 +75,8 @@ export class ImportDb {
             return;
         }
 
-        let obj: ImportObject = {
-            name,
-            file,
-            isDefault,
-        }
+
+        let obj: ImportObject = new ImportObject(name, file, isDefault, discovered);
 
         let exists = ImportDb.imports.findIndex(m => m.name === obj.name && m.file.fsPath === file.fsPath);
 

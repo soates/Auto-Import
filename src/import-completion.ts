@@ -43,28 +43,12 @@ export class ImportCompletion implements vscode.CompletionItemProvider {
 
 
     private buildCompletionItem(imp: ImportObject, document: vscode.TextDocument): any {
-
-        let path = this.createDescription(imp, document);
-
         return {
             label: imp.name,
             kind: vscode.CompletionItemKind.Reference,
-            detail: `import from ${path}`,
-            documentation: `Import ${imp.name} from ${path}`,
+            detail: `import from ${imp.getPath(document)}`,
+            documentation: `Import ${imp.name} from ${imp.getPath(document)}`,
             command: { title: 'AI: Autocomplete', command: 'extension.resolveImport', arguments: [{ imp, document }] }
         }
-    }
-
-    private createDescription(imp: ImportObject, document: vscode.TextDocument) {
-        let path = (imp: ImportObject) => {
-            if ((<any>imp.file).discovered) {
-                return imp.file.fsPath;
-            } else {
-                let rp = PathHelper.normalisePath(
-                    PathHelper.getRelativePath(document.uri.fsPath, imp.file.fsPath));
-                return rp;
-            }
-        };
-        return path(imp);
     }
 }
