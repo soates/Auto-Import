@@ -1,8 +1,9 @@
 import * as path from 'path';
+import * as fs from 'fs';
 
 export class PathHelper {
 
-    public static normalisePath(relativePath) {
+    public static normalisePath(path, absolute) {
         let removeFileExtenion = (rp) => {
             if (rp) {
                 rp = rp.substring(0, rp.lastIndexOf('.'))
@@ -25,14 +26,23 @@ export class PathHelper {
             return rp;
         }
 
-        relativePath = makeRelativePath(relativePath);
-        relativePath = removeFileExtenion(relativePath);
+        if (!absolute) {
+            path = makeRelativePath(path);
+        }
+        path = removeFileExtenion(path);
 
-        return relativePath;
+        return path;
     }
 
     public static getRelativePath(a, b): string {
-        return path.relative(path.dirname(a), b);
+        // Ensure we have a path to a folder
+        if (fs.lstatSync(a).isFile()) {
+            a = path.dirname(a);
+        }
+        return path.relative(a, b);
     }
 
+    public static joinPaths(a, b): string {
+        return path.join(a, b);
+    }
 }

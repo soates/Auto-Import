@@ -73,20 +73,10 @@ export class ImportAction implements vscode.CodeActionProvider {
     }
 
     private actionHandler(context: Context): vscode.Command[] {
-        let path = (imp: ImportObject) => {
-            if ((<any>imp.file).discovered) {
-                return imp.file.fsPath;
-            } else {
-                let rp = PathHelper.normalisePath(
-                    PathHelper.getRelativePath(context.document.uri.fsPath, imp.file.fsPath));
-                return rp;
-            }
-        };
-
         let handlers = [];
-        context.imports.forEach(i => {
+        context.imports.forEach(imp => {
             handlers.push({
-                title: `Import ${i.name} from ${path(i)}`,
+                title: `Import ${imp.name} from ${imp.getPath(context.document)}`,
                 command: 'extension.fixImport',
                 arguments: [context.document, context.range, context.context, context.token, context.imports]
             });

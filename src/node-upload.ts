@@ -22,7 +22,7 @@ export class NodeUpload {
                 let map = mappings[key];
                 if (map) {
                     map.forEach(exp => {
-                        ImportDb.saveImport(exp, exp, { fsPath: key, discovered: true })
+                        ImportDb.saveImport(exp, exp, {fsPath: key}, false, true)
                     });
                 }
             }

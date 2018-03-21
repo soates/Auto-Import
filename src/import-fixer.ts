@@ -25,34 +25,32 @@ export class ImportFixer {
 
     public getTextEdit(document: vscode.TextDocument, imports: Array<ImportObject>) {
 
-        let edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
-        let importObj: vscode.Uri | any = imports[0].file;
-        let importName: string = imports[0].name;
+        const edit: vscode.WorkspaceEdit = new vscode.WorkspaceEdit();
+        const importObj: ImportObject = imports[0];
+        const path = importObj.getPath(document);
 
-        let relativePath = this.normaliseRelativePath(importObj, this.getRelativePath(document, importObj));
-
-        if (this.alreadyResolved(document, relativePath, importName)) {
+        if (this.alreadyResolved(document, path, importObj.name)) {
             return edit;
         }
 
-        if (this.shouldMergeImport(document, relativePath)) {
+        if (this.shouldMergeImport(document, path)) {
             edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0),
-                this.mergeImports(document, edit, importName, importObj, relativePath));
+                this.mergeImports(document, edit, importObj.name, importObj.file, path));
         } else if (/^\/(\/\*) *@flow/.test(document.getText())) {
             edit.insert(document.uri, new vscode.Position(1, 0),
-                this.createImportStatement(imports[0].name, relativePath, true, imports[0].isDefault));
+                this.createImportStatement(imports[0].name, path, true, imports[0].isDefault));
         } else {
             let insertPosition: vscode.Position = document.positionAt(document.getText().lastIndexOf('import')).translate(1, 0);
             edit.insert(document.uri, insertPosition,
-                this.createImportStatement(imports[0].name, relativePath, true, imports[0].isDefault));
+                this.createImportStatement(imports[0].name, path, true, imports[0].isDefault));
         }
 
         return edit;
     }
 
-    private alreadyResolved(document: vscode.TextDocument, relativePath, importName) {
+    private alreadyResolved(document: vscode.TextDocument, path, importName) {
 
-        let exp = new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + relativePath + ')(?:\'\;)')
+        let exp = new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + path + ')(?:\'\;)')
 
         let currentDoc = document.getText();
 
@@ -65,7 +63,7 @@ export class ImportFixer {
         return false;
     }
 
-    private shouldMergeImport(document: vscode.TextDocument, relativePath): boolean {
+    private shouldMergeImport(document: vscode.TextDocument, path): boolean {
         let currentDoc = document.getText();
 
         let isCommentLine = (text: string): boolean => {
@@ -73,12 +71,12 @@ export class ImportFixer {
             return firstTwoLetters === '//' || firstTwoLetters === '/*';
         }
 
-        return currentDoc.indexOf(relativePath) !== -1 && !isCommentLine(currentDoc);
+        return currentDoc.indexOf(path) !== -1 && !isCommentLine(currentDoc);
     }
 
-    private mergeImports(document: vscode.TextDocument, edit: vscode.WorkspaceEdit, name, file, relativePath: string) {
+    private mergeImports(document: vscode.TextDocument, edit: vscode.WorkspaceEdit, name, file, path: string) {
 
-        let exp = new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + relativePath + ')(?:\'\;)')
+        let exp = new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + path + ')(?:\'\;)')
 
         let currentDoc = document.getText();
 
@@ -88,13 +86,13 @@ export class ImportFixer {
             let workingString = foundImport[0];
 
             workingString = workingString
-                .replace(/{|}|from|import|'|"| |;/gi, '').replace(relativePath, '');
+                .replace(/{|}|from|import|'|"| |;/gi, '').replace(path, '');
 
             let importArray = workingString.split(',');
 
             importArray.push(name)
 
-            let newImport = this.createImportStatement(importArray.join(', '), relativePath);
+            let newImport = this.createImportStatement(importArray.join(', '), path);
 
             currentDoc = currentDoc.replace(exp, newImport);
         }
