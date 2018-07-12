@@ -79,17 +79,22 @@
         "autoimport.showNotifications": {
           "type": "boolean",
           "default": false,
-          "description": "Specifies wether to show notifications from Auto Import"
+          "description": "Specifies whether to show notifications from Auto Import"
         },
         "autoimport.doubleQuotes": {
           "type": "boolean",
           "default": false,
-          "description": "Specifies wether to use double quotes"
+          "description": "Specifies whether to use double quotes"
+        },
+        "autoimport.semicolon": {
+          "type": "boolean",
+          "default": true,
+          "description": "Specifies whether to use a semicolon at the end of the line"
         },
         "autoimport.spaceBetweenBraces": {
           "type": "boolean",
           "default": true,
-          "description": "Specifies wether to use spaces between first and last brace"
+          "description": "Specifies whether to use spaces between first and last brace"
         },
         "autoimport.autoComplete": {
           "type": "boolean",

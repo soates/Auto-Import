@@ -7,12 +7,14 @@ export class ImportFixer {
 
     private spacesBetweenBraces;
     private doubleQuotes;
+    private semicolon;
 
     constructor() {
         let config = vscode.workspace.getConfiguration('autoimport');
 
         this.spacesBetweenBraces = config.get<boolean>('spaceBetweenBraces');
         this.doubleQuotes = config.get<boolean>('doubleQuotes');
+        this.semicolon = config.get<boolean>('semicolon');
     }
 
     public fix(document: vscode.TextDocument, range: vscode.Range,
@@ -110,7 +112,8 @@ export class ImportFixer {
             isDefault ? '' : this.spacesBetweenBraces ? ' }' : '}',
             ' from ',
             quoteSymbol + formattedPath + quoteSymbol,
-            endline ? ';\r\n' : ';',
+            this.semicolon ? ';' : '',
+            endline ? '\r\n' : '',
         ].join('');
         return importStr;
     }
