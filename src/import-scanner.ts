@@ -110,7 +110,7 @@ export class ImportScanner {
                 }
                 const workingFile: string = mArr[mArr.length - 1];
                 const isDefault = m.indexOf('default') !== -1;
-                ImportDb.saveImport(workingFile, data, file, isDefault);
+                ImportDb.saveImport(workingFile, data, file, isDefault, null);
             })
         }
     }
