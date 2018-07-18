@@ -35,6 +35,10 @@ Forker from old repo [vscode-extension-auto-import](https://github.com/martinopp
 
 ## Changelog
 
+### 1.4.2
+
+- Fix issues #1 and #13
+
 ### 1.4.1
 
 - Add import action to quick fix menu

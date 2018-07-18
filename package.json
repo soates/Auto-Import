@@ -2,7 +2,7 @@
   "name": "vscode-extension-auto-import",
   "displayName": "Auto Import - ES6, TS, JSX, TSX",
   "description": "Automatically finds, parses and provides code actions and code completion for all available imports. Works with JavaScript and TypeScript. [Forked]",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "contributors": [
     {
       "name": "soates",
