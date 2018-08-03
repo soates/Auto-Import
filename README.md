@@ -27,6 +27,8 @@ Forker from old repo [vscode-extension-auto-import](https://github.com/martinopp
 
 > doubleQuotes - Use double quotes rather than single
 
+> semicolon - Use a semicolon at the end of import statements, defaults to true
+
 > spaceBetweenBraces - Difference between import {test} and import { test }
 
 > autoComplete - Adds found items to intellisense and automatically imports then
