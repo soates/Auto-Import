@@ -1,7 +1,7 @@
-import * as vscode from 'vscode'
-import * as path from 'path';
+import * as vscode from 'vscode';
 
 import { ImportObject } from './import-db';
+import { PathHelper } from './helpers/path-helper';
 
 export class ImportFixer {
 
@@ -133,36 +133,13 @@ export class ImportFixer {
 
     private getRelativePath(document, importObj: vscode.Uri | any): string {
         return importObj.discovered ? importObj.fsPath :
-            path.relative(path.dirname(document.fileName), importObj.fsPath);
+            PathHelper.getRelativePath(document.fileName, importObj.fsPath);
     }
 
     private normaliseRelativePath(importObj, relativePath: string): string {
 
-        let removeFileExtenion = (rp) => {
-            if (rp) {
-                rp = rp.substring(0, rp.lastIndexOf('.'))
-            }
-            return rp;
-        }
-
-        let makeRelativePath = (rp) => {
-
-            let preAppend = './';
-
-            if (!rp.startsWith(preAppend)) {
-                rp = preAppend + rp;
-            }
-
-            if (/^win/.test(process.platform)) {
-                rp = rp.replace(/\\/g, '/');
-            }
-
-            return rp;
-        }
-
         if (importObj.discovered === undefined) {
-            relativePath = makeRelativePath(relativePath);
-            relativePath = removeFileExtenion(relativePath);
+            relativePath = PathHelper.normalisePath(relativePath);
         }
 
         return relativePath;
