@@ -1,6 +1,7 @@
 import { PathHelper } from './helpers/path-helper';
 import { ImportDb, ImportObject } from './import-db';
 import { ImportFixer } from './import-fixer';
+import { PackageNameHelper } from './helpers/package-name-helper';
 
 import * as vscode from 'vscode';
 
@@ -36,6 +37,7 @@ export class ImportCompletion implements vscode.CompletionItemProvider {
                 .filter(f => {
                     return f.name.toLowerCase().indexOf(wordToComplete) > -1
                 })
+                .filter(imp => PackageNameHelper.isPackageNameQuoted(imp.getPath(document)))
                 .map(i => this.buildCompletionItem(i, document))
             );
         })
