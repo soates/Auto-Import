@@ -1,4 +1,4 @@
-const isQuote = char => char === `"` || char === `'`;
+const isQuote = (char: string) => char === `"` || char === `'`;
 
 export class PackageNameHelper {
     static isPackageNameQuoted(packageName: string): boolean {
