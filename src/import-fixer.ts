@@ -78,7 +78,9 @@ export class ImportFixer {
 
     private mergeImports(document: vscode.TextDocument, edit: vscode.WorkspaceEdit, name, file, path: string) {
 
-        let exp = new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + path + ')(?:\'\;)')
+        let exp = this.semicolon === true ?
+            new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + path + ')(?:\'\;)') :
+            new RegExp('(?:import\ \{)(?:.*)(?:\}\ from\ \')(?:' + path + ')(?:\'\)')
 
         let currentDoc = document.getText();
 
@@ -87,8 +89,12 @@ export class ImportFixer {
         if (foundImport) {
             let workingString = foundImport[0];
 
+            let replaceTarget = this.semicolon === true ?
+                /{|}|from|import|'|"| |;/gi :
+                /{|}|from|import|'|"| |/gi;
+            
             workingString = workingString
-                .replace(/{|}|from|import|'|"| |;/gi, '').replace(path, '');
+                .replace(replaceTarget, '').replace(path, '');
 
             let importArray = workingString.split(',');
 
