@@ -41,7 +41,31 @@ export class ImportFixer {
             edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0),
                 this.mergeImports(document, edit, importName, importObj, relativePath));
         } else {
-            edit.insert(document.uri, new vscode.Position(0, 0),
+            // Insert new import line after shebang and comments
+            let i = 0;
+            if (document.lineAt(i).text.startsWith('#!')) {
+                i++;
+            }
+            let multiline = false;
+            for (; i < document.lineCount; i++) {
+                if (document.lineAt(i).text.startsWith('//')) {
+                    continue;
+                }
+                if (document.lineAt(i).text.startsWith('/*')) {
+                    multiline = true;
+                    continue;
+                }
+                if (document.lineAt(i).text.endsWith('*/')) {
+                    multiline = false;
+                    continue;
+                }
+                if (multiline) {
+                    continue;
+                }
+                break;
+            }
+            let position = new vscode.Position(i, 0);
+            edit.insert(document.uri, position,
                 this.createImportStatement(imports[0].name, relativePath, true));
         }
 
